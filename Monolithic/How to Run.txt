@@ -1,0 +1,39 @@
+=======================================================================================================================================
+							Resturant App
+=======================================================================================================================================
+
+Pre-Requisites :
+
+	a. JDK 8
+	b. MySql Db
+	c. Mongo Db
+	d. Postman
+
+Steps :
+
+	1. Create a database in MySql db named as "monolithic"
+	2. Create a database in Mongo db named as "monolithic" and collection name as "order_details"
+	3. Open ResturantAppApplication.java and Run/Debug on server
+	4. Use Postman to test the api's from Api Doc.
+
+=======================================================================================================================================
+				   		Resturant App Mobile Web
+=======================================================================================================================================
+Pre-Requisites :
+
+	a. Resturant App
+	b. Node Js
+
+Steps :
+
+	1. Open cmd under Resturant_App_Mobile_Web file directory -> npm start. 
+	
+	2. Press w in cmd for web app and get the url where web app is running. 
+
+	3. Open application.properties in Resturant_App and update the resturant.app.mobile.web.url (use the ip instead of localhost)
+
+	4. Execute all the steps of Resturant_App. (make sure Resturant app is running to provide api response)
+	
+	5. Get the url of Resturant_App , Open apiService.js in Resturant_App_Mobile_Web and update the RESTURANT_APP_URL.
+
+	5. Download Expo go in mobile , Scan the qr-code from cmd in expo go. (make sure laptop and mobile are using same wifi network)
