@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Heading, Center ,NativeBaseProvider, Text, Link, PresenceTransition, Alert, VStack, HStack, Input} from "native-base";
+import { Box, Heading, Text, Center ,NativeBaseProvider, Link, PresenceTransition, VStack, HStack, Input , Alert} from "native-base";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import apiService from './service/apiService';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/native-stack';
-import { TextInput } from 'react-native';
+import { View, StyleSheet, BackHandler, Alert as ReactAlert} from 'react-native';
 
 const Home = ({navigation}) => {
 
@@ -12,42 +12,68 @@ const Home = ({navigation}) => {
     const [token , setToken] = useState("");
     const [userEmail , setUserEmail] = useState("");
 
-    //check user logged In
+    //back button for web - not working
+    // React.useEffect(
+    //     () =>
+    //       navigation.addListener('beforeRemove', (e) => {
+    //         // if (!hasUnsavedChanges) {
+    //         //   // If we don't have unsaved changes, then we don't need to do anything
+    //         //   return;
+    //         // }
+    
+    //         // Prevent default behavior of leaving the screen
+    //         e.preventDefault();
+    
+    //         // Prompt the user before leaving the screen
+    //         Alert.alert(
+    //           'Discard changes?',
+    //           'You have unsaved changes. Are you sure to discard them and leave the screen?',
+    //           [
+    //             { text: "Don't leave", style: 'cancel', onPress: () => {} },
+    //             {
+    //               text: 'Discard',
+    //               style: 'destructive',
+    //               // If the user confirmed, then we dispatch the action we blocked earlier
+    //               // This will continue the action that had triggered the removal of the screen
+    //               onPress: () => navigation.dispatch(e.data.action),
+    //             },
+    //           ]
+    //         );
+    //       }),
+    //     [navigation]
+    //   );
+
     useEffect( () => {
 
-
-        
+        //check user logged In
         loggedIn();
 
-        navigation.addListener( (e) => {
-            const action = e.data.action;
-
-            console.log(" = = = "+action);
-
-            // if (!hasUnsavedChanges) {
-            //   return;
-            // }
-    
-            e.preventDefault();
-    
-            Alert.alert(
-              'Discard changes?',
-              'You have unsaved changes. Are you sure to discard them and leave the screen?',
-              [
-                { text: "Don't leave", style: 'cancel', onPress: () => {} },
+        //back button of mobile - working
+        const backButtonAction = () => {
+            ReactAlert.alert('Hold on !', 'Are you sure you want to exit ?', [
                 {
-                  text: 'Discard',
-                  style: 'destructive',
-                  onPress: () => navigation.dispatch(action),
+                    text: 'Cancel',
+                    onPress: () => null,
+                    style: 'cancel',
                 },
-              ]
-            );
-          })
+                {   
+                    text: 'YES', 
+                    onPress: () => BackHandler.exitApp()
+                },
+            ]);
+            return true;
+        };
+    
+        const backHandler = BackHandler.addEventListener(
+            'hardwareBackPress',
+            backButtonAction,
+        );
+      
+        return () => {
+            backHandler.remove();
+        }
 
-
-
-
-    }, [navigation]);
+    }, []);
 
     //get the stored value
     const loggedIn =  () => {
@@ -66,8 +92,8 @@ const Home = ({navigation}) => {
                         if(key == "userEmail")
                             setUserEmail(value);
 
-                        if(key == "loggedIn")
-                            navigation.push("Home");
+                        //if(key == "loggedIn")
+                          //  navigation.replace("Home");
                     });
                 });
             });
@@ -97,6 +123,10 @@ const Home = ({navigation}) => {
                                 icon : "success",
                                 message : response.message
                             }]);
+
+                            setTimeout(() => {
+                                navigation.replace("SignInNew");
+                            }, 1600 );
                         }
                         else
                         {
@@ -108,10 +138,6 @@ const Home = ({navigation}) => {
                     }).catch(function(error) {
                         console.log('There has been a problem with your fetch operation: ' + error.message);
                     }); 
-                            
-        setTimeout(() => {
-            props.navigation.navigate("SignInNew");
-        }, 1600 );
     }
 
     return (
@@ -124,7 +150,7 @@ const Home = ({navigation}) => {
                         <Box safeArea p="2" py="8" w="90%" maxW="290">
                             <Heading size="lg" fontWeight="600" color="coolGray.800" _dark={{ color: "warmGray.50" }}>
                                 Welcome , User =  { ( userEmail ) }
-                                <TextInput></TextInput>
+                                <Text >Click Back button!</Text>
                             </Heading> 
                         </Box>
 

@@ -5,7 +5,7 @@ import { Pressable } from "react-native";
 import { FontAwesome5, MaterialIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const SignUpNew = (props) => {
+const SignUpNew = ({navigation}) => {
   
   const [popUp, setPopUp] = useState([]);
   const [errors, setErrors] = useState([]);
@@ -34,7 +34,7 @@ const SignUpNew = (props) => {
                       let value = store[i][1];
 
                       if(key == "loggedIn")
-                          props.navigation.navigate("Home");
+                          navigation.navigate("Home");
                   });
               });
           });
@@ -133,7 +133,7 @@ const SignUpNew = (props) => {
                         }]);
 
                         setTimeout(() => {
-                          props.navigation.navigate("SignInNew");
+                          navigation.navigate("SignInNew");
                         }, 1600 );
                     }   
                     else

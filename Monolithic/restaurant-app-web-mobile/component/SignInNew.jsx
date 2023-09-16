@@ -20,40 +20,7 @@ const SignInNew = ({navigation})  => {
         
         loggedIn();
 
-        console.log(" = = = ");
-
-        navigation.addListener( (e) => {
-
-            console.log(" = = = 1 ");
-
-            const action = e.data.action;
-
-            console.log(" = = = "+action);
-
-            // if (!hasUnsavedChanges) {
-            //   return;
-            // }
-    
-            e.preventDefault();
-    
-            Alert.alert(
-              'Discard changes?',
-              'You have unsaved changes. Are you sure to discard them and leave the screen?',
-              [
-                { text: "Don't leave", style: 'cancel', onPress: () => {} },
-                {
-                  text: 'Discard',
-                  style: 'destructive',
-                  onPress: () => navigation.dispatch(action),
-                },
-              ]
-            );
-          })
-
-
-
-
-    }, [navigation]);
+    }, []);
 
     //get the stored value
     const loggedIn =  () => {
@@ -65,12 +32,8 @@ const SignInNew = ({navigation})  => {
                         // get at each store's key/value so you can work with it
                         let key = store[i][0];
                         let value = store[i][1];
-
-                        console.log(" "+key +" "+value);
-
-                        if(key == "loggedIn")
+                        if(key == "loggedIn"  && value == "true")
                             navigation.replace("Home");
-
                     });
                 });
             });
@@ -130,7 +93,7 @@ const SignInNew = ({navigation})  => {
                       { 
                         if(response.httpStatus == "FOUND")
                         {
-                            AsyncStorage.multiSet( [ [ "token",response.token] , [ "userEmail",response.userEmail] , [ "loggedIn",true]   ]  );
+                            AsyncStorage.multiSet( [ [ "token",response.token] , [ "userEmail",response.userEmail] , [ "loggedIn", "true"]   ]  );
 
                             setPopUp([{
                                 icon : "success",
