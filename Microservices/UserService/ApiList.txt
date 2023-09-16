@@ -1,0 +1,95 @@
+USER SERVICE 
+
+1. CREATE NEW USER 
+
+url      :	POST - http://localhost:8081/users/createUser
+
+request  : 
+
+		{
+    			"name":"akash das",
+    			"email":"akash@gmail.com",
+    			"about":"Im a SSE"
+		}
+
+response :                                                      status : 201 created
+
+		{
+    			"userId": "5dd08395-7627-49aa-ba2a-4562d262fcb4",
+    			"name": "akash das",
+    			"email": "akash@gmail.com",
+    			"about": "Im a SSE"
+		}
+
+======================================================================================================================
+
+2. GET ALL USERS
+
+url      :	GET - http://localhost:8081/users/user/list
+
+response :                                                      status : 200 OK
+
+		{
+    			"userId": "5dd08395-7627-49aa-ba2a-4562d262fcb4",
+    			"name": "akash das",
+    			"email": "akash@gmail.com",
+    			"about": "Im a SSE"
+		}
+
+======================================================================================================================
+
+3. GET USER
+
+url      :	GET - http://localhost:8081/users/user/get/5dd08395-7627-49aa-ba2a-4562d262fcb4
+
+response :                                                      status : 200 OK
+
+		{
+    			"userId": "5dd08395-7627-49aa-ba2a-4562d262fcb4",
+    			"name": "akash das",
+    			"email": "akash@gmail.com",
+    			"about": "Im a SSE"
+		}
+								status : 404 Not Found
+
+		{
+    			"message": "User not found.",
+    			"success": true,
+    			"httpStatus": "NOT_FOUND"
+		}
+
+======================================================================================================================
+
+4. DELETE USER
+
+url      :	GET - http://localhost:8081/users/user/delete/5dd08395-7627-49aa-ba2a-4562d262fcb4
+
+response :                                                      status : 200 OK
+
+		Deleted Successfully
+
+======================================================================================================================
+
+5. UPDATE USER 
+
+url      :	POST - http://localhost:8081/users/user/update
+
+request  : 
+
+		{
+			"userId": "5dd08395-7627-49aa-ba2a-4562d262fcb4",
+    			"name":"akash das",
+    			"email":"akash@gmail.com",
+    			"about":"Im a SSE"
+		}
+
+response :                                                      status : 201 created
+
+		{
+    			"userId": "5dd08395-7627-49aa-ba2a-4562d262fcb4",
+    			"name": "akash das",
+    			"email": "akash@gmail.com",
+    			"about": "Im a SSE"
+		}
+
+======================================================================================================================
