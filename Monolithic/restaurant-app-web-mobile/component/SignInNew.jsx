@@ -102,7 +102,7 @@ const SignInNew = ({navigation})  => {
 
                             setTimeout(() => {
                                 navigation.replace("Home");
-                            }, 1600 );
+                            }, 1100 );
                         }   
                         else
                         {
@@ -171,7 +171,7 @@ const SignInNew = ({navigation})  => {
                                                                         animate={{
                                                                                     opacity: 1,
                                                                                     transition: {
-                                                                                        duration: 1500
+                                                                                        duration: 1000
                                                                                     }
                                                                                 }} key={item.icon}>
                                         <Alert w="100%" variant="solid" colorScheme={item.icon} status={item.icon}>

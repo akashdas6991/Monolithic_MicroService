@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Heading, Text, Center ,NativeBaseProvider, Link, PresenceTransition, VStack, HStack, Input , Alert} from "native-base";
+import { Box, Heading, Text, Center ,NativeBaseProvider, Link, PresenceTransition, VStack, HStack , Alert} from "native-base";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import apiService from './service/apiService';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/native-stack';
-import { View, StyleSheet, BackHandler, Alert as ReactAlert} from 'react-native';
+import { BackHandler, Alert as ReactAlert} from 'react-native';
 
 const Home = ({navigation}) => {
 
@@ -57,7 +57,7 @@ const Home = ({navigation}) => {
                     style: 'cancel',
                 },
                 {   
-                    text: 'YES', 
+                    text: 'Yes', 
                     onPress: () => BackHandler.exitApp()
                 },
             ]);
@@ -75,7 +75,41 @@ const Home = ({navigation}) => {
 
     }, []);
 
-    //get the stored value
+    //     React.useEffect(() => {
+    //         const unsubscribe = navigation.addListener('focusout', () => {
+    //           alert('Screen is focused');
+    //           // The screen is focused
+    //           // Call any action
+    //                     // Prompt the user before leaving the screen
+    //             // alert(
+    //             //   'Discard changes?',
+    //             //   'You have unsaved changes. Are you sure to discard them and leave the screen?',
+    //             //   [
+    //             //     { text: "Don't leave", style: 'cancel', onPress: () => {} },
+    //             //     {
+    //             //       text: 'Discard',
+    //             //       style: 'destructive',
+    //             //       // If the user confirmed, then we dispatch the action we blocked earlier
+    //             //       // This will continue the action that had triggered the removal of the screen
+    //             //       onPress: () => navigation.dispatch(e.data.action),
+    //             //     },
+    //             //   ]
+    //             // );
+
+    //             let text = "Press a button!\nEither OK or Cancel.";
+    //   if (confirm(text) == true) {
+    //     text = "You pressed OK!";
+    //   } else {
+    //     text = "You canceled!";
+    //   }
+
+    //         });
+        
+    //         // Return the function to unsubscribe from the event so it gets removed on unmount
+    //         return unsubscribe;
+    //     }, []);
+
+    //check logged In
     const loggedIn =  () => {
         try 
         {
@@ -126,7 +160,7 @@ const Home = ({navigation}) => {
 
                             setTimeout(() => {
                                 navigation.replace("SignInNew");
-                            }, 1600 );
+                            }, 1100 );
                         }
                         else
                         {
@@ -150,7 +184,6 @@ const Home = ({navigation}) => {
                         <Box safeArea p="2" py="8" w="90%" maxW="290">
                             <Heading size="lg" fontWeight="600" color="coolGray.800" _dark={{ color: "warmGray.50" }}>
                                 Welcome , User =  { ( userEmail ) }
-                                <Text >Click Back button!</Text>
                             </Heading> 
                         </Box>
 
@@ -164,7 +197,7 @@ const Home = ({navigation}) => {
                                                                     animate={{
                                                                                 opacity: 1,
                                                                                 transition: {
-                                                                                    duration: 1500
+                                                                                    duration: 1000
                                                                                 }
                                                                             }} key={item.icon}>
                                     <Alert w="100%" variant="solid" colorScheme={item.icon} status={item.icon}>
@@ -182,6 +215,48 @@ const Home = ({navigation}) => {
                                 </PresenceTransition>
                             )
                         })}
+
+                        <Box safeArea p="2" py="8" w="90%" maxW="290">
+                            <Heading size="lg" fontWeight="600" color="coolGray.800" _dark={{ color: "warmGray.50" }}>
+                                User/Admin view
+                            </Heading> 
+                            <Link _text={{ color: "indigo.500", fontWeight: "medium", fontSize: "sm" }} onPress={ handleSignOut }>
+                                User View
+                            </Link>
+                            <Link _text={{ color: "indigo.500", fontWeight: "medium", fontSize: "sm" }} onPress={ handleSignOut }>
+                                User Update
+                            </Link>
+                            <Link _text={{ color: "indigo.500", fontWeight: "medium", fontSize: "sm" }} onPress={ handleSignOut }>
+                                User Delete
+                            </Link>
+                            <Link _text={{ color: "indigo.500", fontWeight: "medium", fontSize: "sm" }} onPress={ handleSignOut }>
+                                User Order List
+                            </Link>
+                            <Link _text={{ color: "indigo.500", fontWeight: "medium", fontSize: "sm" }} onPress={ handleSignOut }>
+                                Order Food
+                            </Link>
+                            <Link _text={{ color: "indigo.500", fontWeight: "medium", fontSize: "sm" }} onPress={ handleSignOut }>
+                                Order View
+                            </Link>
+                            
+                            <Link _text={{ color: "indigo.500", fontWeight: "medium", fontSize: "sm" }} onPress={ handleSignOut }>
+                                Order Delete
+                            </Link>
+
+                            {/* admin view */}
+
+                            <Heading size="lg" fontWeight="600" color="coolGray.800" _dark={{ color: "warmGray.50" }}>
+                                Admin view
+                            </Heading> 
+
+                            <Link _text={{ color: "indigo.500", fontWeight: "medium", fontSize: "sm" }} onPress={ handleSignOut }>
+                                User List
+                            </Link>
+
+                            <Link _text={{ color: "indigo.500", fontWeight: "medium", fontSize: "sm" }} onPress={ handleSignOut }>
+                                Order List
+                            </Link>
+                        </Box>
 
                     </Center>
                 </Box>

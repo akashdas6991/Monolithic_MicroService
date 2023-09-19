@@ -1,5 +1,5 @@
 =======================================================================================================================================
-							Resturant App
+						     Resturant App
 =======================================================================================================================================
 
 Pre-Requisites :
@@ -11,9 +11,9 @@ Pre-Requisites :
 
 Steps :
 
-	1. Create a database in MySql db named as "monolithic"
-	2. Create a database in Mongo db named as "monolithic" and collection name as "order_details"
-	3. Open ResturantAppApplication.java and Run/Debug on server
+	1. Create a database in MySql db named as "monolithic".
+	2. Create a database in Mongo db named as "monolithic" and collection name as "order_details".
+	3. Open ResturantAppApplication.java and Run/Debug.
 	4. Use Postman to test the api's from Api Doc.
 
 =======================================================================================================================================

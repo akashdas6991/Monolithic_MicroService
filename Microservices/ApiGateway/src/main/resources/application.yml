@@ -1,9 +1,10 @@
-#Port Change
-server.port : 8083
+#Port Define
+server.port : 8080
 
 #App name
 spring.application.name : API-GATEWAY
 
+#Api Routes
 spring:
   cloud:
     gateway:
@@ -18,18 +19,18 @@ spring:
           predicates :
             - Path= /users/**
           filters:
-            - JwtTokenAuthenticationFilter
+            - JwtAuthenticationFilter
 
         - id: RATING-SERVICE
           uri: lb://RATING-SERVICE
           predicates:
             - Path= /ratings/**
           filters:
-            - JwtTokenAuthenticationFilter
+            - JwtAuthenticationFilter
 
 
-#Eureka config
+#Eureka Client Config
 eureka.instance.prefer-ip-address   : true
 eureka.client.fetch-registry        : true
 eureka.client.register-with-eureka  : true
-eureka.client.service-url.defaultZone : http://localhost:8080/eureka
+eureka.client.service-url.defaultZone : http://localhost:8761/eureka

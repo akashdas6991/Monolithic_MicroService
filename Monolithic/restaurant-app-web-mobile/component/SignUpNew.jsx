@@ -34,7 +34,7 @@ const SignUpNew = ({navigation}) => {
                       let value = store[i][1];
 
                       if(key == "loggedIn")
-                          navigation.navigate("Home");
+                          navigation.replace("Home");
                   });
               });
           });
@@ -119,8 +119,6 @@ const SignUpNew = ({navigation}) => {
 
     if(validate())
     {
-      console.log("validate " + validate())
-
         ApiService.signUp(requestBody)
                   .then(response => response.json() )
                   .then( (response) =>  
@@ -133,8 +131,8 @@ const SignUpNew = ({navigation}) => {
                         }]);
 
                         setTimeout(() => {
-                          navigation.navigate("SignInNew");
-                        }, 1600 );
+                          navigation.replace("SignInNew");
+                        }, 1100 );
                     }   
                     else
                     {
@@ -202,7 +200,7 @@ const SignUpNew = ({navigation}) => {
                                                         animate={{
                                                                     opacity: 1,
                                                                     transition: {
-                                                                        duration: 1500
+                                                                        duration: 1000
                                                                     }
                                                                 }} key={item.icon}>
                         <Alert w="100%" variant="solid" colorScheme={item.icon} status={item.icon}>
@@ -227,7 +225,7 @@ const SignUpNew = ({navigation}) => {
                 <Text fontSize="sm" color="coolGray.600" _dark={{ color: "warmGray.200" }}>
                     I'm a new user.{" "}
                 </Text>
-                <Link _text={{ color: "indigo.500", fontWeight: "medium", fontSize: "sm" }} onPress={ () => props.navigation.navigate("SignInNew") }>
+                <Link _text={{ color: "indigo.500", fontWeight: "medium", fontSize: "sm" }} onPress={ () => navigation.replace("SignInNew") }>
                     Sign In
                 </Link>
             </HStack>

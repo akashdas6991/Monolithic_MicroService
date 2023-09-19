@@ -1,0 +1,19 @@
+Steps : 
+	1. ServiceRegistry
+		a. Open ServiceRegistryApplication.java and Run/Debug. 
+			
+			- It will run Eureka Server on default eureka port localhost:8761.
+			- Whenever a service annotated with EurekaClient Starts , will be enlisted here.
+
+	2. ApiGateway
+		a. Open ApiGatewayApplication.java and Run/Debug. 
+			
+			- Routes all micro services api to one end point.
+
+	3. AuthenticationService
+		a. Open AuthenticationServiceApplication.java and Run/Debug. 
+
+			- 
+
+	4. UserService
+		a. Open UserServiceApplication.java and Run/Debug
