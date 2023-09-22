@@ -1,0 +1,559 @@
+------------------------------------------------------------------------------------------------------
+1. POST - http://localhost:8080/auth/user/signUp
+------------------------------------------------------------------------------------------------------
+
+request-body 
+====================================================
+
+{
+    "userNamee":"Paul",
+    "userEmail":"paul@gmail.com",
+    "userPassword":"paul123",
+    "userMobile":"9093040282"
+}
+
+reponse-body 					
+====================================================
+
+a. If its new user , Creates a new user					
+
+{							status : 201 Created
+    "userNamee": "Jacob",
+    "userEmail": "jacob@gmail.com",
+    "userMobile": "9093040282",
+    "httpStatus": "CREATED"
+}
+
+b. If user exist , ask user to sign in
+
+{							status : 302 Found
+    "message": "User already exist.Please Sign In.",
+    "httpStatus": "FOUND"
+}
+
+------------------------------------------------------------------------------------------------------
+2. POST - http://localhost:8080/auth/user/signIn
+------------------------------------------------------------------------------------------------------
+
+request-body 
+====================================================
+
+{
+    "userEmail":"jacob@gmail.com",
+    "userPassword":"jacob123"
+}
+
+reponse-body 					
+====================================================
+
+a. If user exists with correct password , Give token					
+
+{							status : 302 Found
+    "token": 			 			"eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJSRVNUVVJBTlQtQVBQIiwic3ViIjoiamFjb2JAZ21haWwuY29tIiwiaWF0IjoxNjkzNzI3MDk4LCJleHAiOjE2OTM3MzA2OTh9.AtNp3QU7fb8rYNBeOUoAEom932Gk		yAgE5E6hXfxgM5A",
+    "userNamee": "Jacob",
+    "userEmail": "jacob@gmail.com",
+    "userMobile": "9093040282",
+    "httpStatus": "FOUND"
+}
+
+b. If user exist ,but password is wrong
+
+{							status : 403 Unauthorized
+    "message": "Incorrect password.",
+    "httpStatus": "UNAUTHORIZED"
+}
+
+c. If user does not exist , ask user to sign up
+
+{							status : 404 Not Found
+    "message": "User does not exist.Please Sign Up.",
+    "httpStatus": "NOT_FOUND"
+}
+
+------------------------------------------------------------------------------------------------------
+3. POST - http://localhost:8080/auth/user/signOut
+------------------------------------------------------------------------------------------------------
+
+request-body 
+====================================================
+
+Bearer token : 
+
+eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJSRVNUVVJBTlQtQVBQIiwic3ViIjoiamFjb2JAZ21haWwuY29tIiwiaWF0IjoxNjkzNzI3MDk4LCJleHAiOjE2OTM3MzA2OTh9.AtNp3QU7fb8rYNBeOUoAEom932GkyAgE5E6hXfxgM5A
+
+Body :
+{
+    "userEmail":"jacob@gmail.com"
+}
+
+reponse-body 					
+====================================================
+
+a. If credentials are correct				
+
+{							status : 200 OK
+    "message": "Sign Out Successfully.",
+    "httpStatus": "OK"
+}
+
+b. If credentials are incorrect
+
+{							status : 406 Not Acceptable
+    "message": "Illegal token",
+    "httpStatus": "NOT_ACCEPTABLE"
+}
+
+------------------------------------------------------------------------------------------------------
+4. GET - http://localhost:8080/auth/jwt/token/validate
+------------------------------------------------------------------------------------------------------
+
+request-body 
+====================================================
+
+Bearer token : 
+
+eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJSRVNUVVJBTlQtQVBQIiwic3ViIjoiamFjb2JAZ21haWwuY29tIiwiaWF0IjoxNjkzNzI3MDk4LCJleHAiOjE2OTM3MzA2OTh9.AtNp3QU7fb8rYNBeOUoAEom932GkyAgE5E6hXfxgM5A
+
+reponse-body 					
+====================================================
+
+a. If token validates				
+
+{							status : 200 OK
+    "message": "Valid Token",
+    "httpStatus": "OK"
+}
+
+b. If token does not validates
+
+{ }							status : 401 Unauthorized
+
+------------------------------------------------------------------------------------------------------
+5. POST - http://localhost:8080/order/save
+------------------------------------------------------------------------------------------------------
+
+request-body 
+====================================================
+
+Bearer token : 
+
+eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJSRVNUVVJBTlQtQVBQIiwic3ViIjoiamFjb2JAZ21haWwuY29tIiwiaWF0IjoxNjkzNzI3MDk4LCJleHAiOjE2OTM3MzA2OTh9.AtNp3QU7fb8rYNBeOUoAEom932GkyAgE5E6hXfxgM5A
+
+Body :
+
+a. With Out order id to create new order	
+
+{
+        "orderName": "peppy panner extra large with coke",
+        "orderRating": 3.0,
+        "orderItems": "Chicken 4pcs and Coke ",
+        "orderFeedback": "very Good",
+        "userEmail": "jacob@gmail.com"
+}
+
+b. With order id to update existing order	
+
+{
+	"orderId": 7635,
+        "orderName": "peppy panner extra large with coke",
+        "orderRating": 3.0,
+        "orderItems": "Chicken 4pcs and Coke ",
+        "orderFeedback": "very Good",
+        "userEmail": "jacob@gmail.com"
+}
+
+reponse-body 					
+====================================================
+
+a. With Out order id , If token validates , Create new Order				
+
+{							status : 200 OK
+    "message": "Order created successfully",
+    "httpStatus": "CREATED",
+    "orderId": 7635,
+    "orderName": "peppy panner extra large with coke",
+    "orderFeedback": "very Good",
+    "orderItems": "Chicken 4pcs and Coke ",
+    "orderRating": 3.0,
+    "userEmail": "jacob@gmail.com"
+}
+
+b. With order id , If token validates , Update existing order
+
+{							status : 200 OK
+
+    "message": "Order updated successfully",
+    "httpStatus": "OK",
+    "orderId": 7635,
+    "orderName": "peppy panner extra large with coke",
+    "orderFeedback": "very Good",
+    "orderItems": "Chicken 4pcs and Coke ",
+    "orderRating": 3.0,
+    "userEmail": "jacob@gmail.com"
+}
+
+------------------------------------------------------------------------------------------------------
+6. POST - http://localhost:8080/order/view
+------------------------------------------------------------------------------------------------------
+
+request-body 
+====================================================
+
+Bearer token : 
+
+eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJSRVNUVVJBTlQtQVBQIiwic3ViIjoiamFjb2JAZ21haWwuY29tIiwiaWF0IjoxNjkzNzI3MDk4LCJleHAiOjE2OTM3MzA2OTh9.AtNp3QU7fb8rYNBeOUoAEom932GkyAgE5E6hXfxgM5A
+
+Body :
+
+{
+    "orderId": 7635
+}
+
+reponse-body 					
+====================================================
+
+a. If order found 				
+
+{							status : 302 Found
+    "orderId": 7635,
+    "orderName": "peppy panner extra large with coke",
+    "orderFeedback": "very Good",
+    "orderItems": "Chicken 4pcs and Coke ",
+    "orderRating": 3.0,
+    "userEmail": "jacob@gmail.com",
+    "message": "Order found.",
+    "httpStatus": "FOUND"
+}
+
+b. If order not found
+
+{							status : 404 Not Found
+
+    "message": "Order not found.",
+    "httpStatus": "NOT_FOUND"
+}
+
+------------------------------------------------------------------------------------------------------
+7. GET - http://localhost:8080/order/list
+------------------------------------------------------------------------------------------------------
+
+request-body 
+====================================================
+
+Bearer token : 
+
+eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJSRVNUVVJBTlQtQVBQIiwic3ViIjoiamFjb2JAZ21haWwuY29tIiwiaWF0IjoxNjkzNzI3MDk4LCJleHAiOjE2OTM3MzA2OTh9.AtNp3QU7fb8rYNBeOUoAEom932GkyAgE5E6hXfxgM5A
+
+Body :
+
+{}
+
+reponse-body 					
+====================================================
+
+a. If order found 				
+
+[							status : 200 OK
+    {
+        "orderId": 9227,
+        "orderName": "Chicken Bucket extra large",
+        "orderRating": 3.0,
+        "orderItems": "Chicken 4pcs and Coke ",
+        "orderFeedback": "very Good",
+        "userEmail": "jacob@gmail.com"
+    },
+    {
+        "orderId": 6173,
+        "orderName": "peppy panner extra large with coke",
+        "orderRating": 3.0,
+        "orderItems": "Chicken 4pcs and Coke ",
+        "orderFeedback": "very Good",
+        "userEmail": "jacob@gmail.com"
+    },
+    {
+        "orderId": 7635,
+        "orderName": "peppy panner extra large with coke",
+        "orderRating": 3.0,
+        "orderItems": "Chicken 4pcs and Coke ",
+        "orderFeedback": "very Good",
+        "userEmail": "jacob@gmail.com"
+    },
+    {
+        "orderId": 9921,
+        "orderName": "peppy panner extra large with coke",
+        "orderRating": 3.0,
+        "orderItems": "Chicken 4pcs and Coke ",
+        "orderFeedback": "very Good",
+        "userEmail": "jacob@gmail.com"
+    }
+]
+
+b. If order not found
+
+{ }							status : 200 OK
+
+
+------------------------------------------------------------------------------------------------------
+8. POST - http://localhost:8080/order/delete
+------------------------------------------------------------------------------------------------------
+
+request-body 
+====================================================
+
+Bearer token : 
+
+eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJSRVNUVVJBTlQtQVBQIiwic3ViIjoiamFjb2JAZ21haWwuY29tIiwiaWF0IjoxNjkzNzI3MDk4LCJleHAiOjE2OTM3MzA2OTh9.AtNp3QU7fb8rYNBeOUoAEom932GkyAgE5E6hXfxgM5A
+
+Body :
+
+{ "orderId": 9921 }
+
+reponse-body 					
+====================================================
+
+a. If order found and deleted 				
+
+{							status : 200 OK
+
+    "message": "Order deleted successfully.",
+    "httpStatus": "OK"
+}
+
+b. If order not found and deletion failed
+
+{							status : 404 Not Found
+    "message": "Order does not exist.",
+    "httpStatus": "NOT_FOUND"
+}
+
+------------------------------------------------------------------------------------------------------
+9. POST - http://localhost:8080/user/update
+------------------------------------------------------------------------------------------------------
+
+request-body 
+====================================================
+
+Bearer token : 
+
+eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJSRVNUVVJBTlQtQVBQIiwic3ViIjoiamFjb2JAZ21haWwuY29tIiwiaWF0IjoxNjkzNzI3MDk4LCJleHAiOjE2OTM3MzA2OTh9.AtNp3QU7fb8rYNBeOUoAEom932GkyAgE5E6hXfxgM5A
+
+Body :
+
+{ 
+    "userNamee":"Jacob",
+    "userEmail":"jacob@gmail.com",
+    "userPassword":"jacob123",
+    "userMobile":"9632587410"
+}
+
+reponse-body 					
+====================================================
+
+a. If user found and updated 				
+
+{							status : 200 OK
+
+    "userNamee": "Jacob",
+    "userEmail": "jacob@gmail.com",
+    "userMobile": "9632587410",
+    "message": "User updated successfully",
+    "httpStatus": "OK"
+}
+
+b. If user not found and update failed
+
+{							status : 404 Not Found
+    "message": "User does not exist.",
+    "httpStatus": "NOT_FOUND"
+}
+
+------------------------------------------------------------------------------------------------------
+10. POST - http://localhost:8080/user/delete
+------------------------------------------------------------------------------------------------------
+
+request-body 
+====================================================
+
+Bearer token : 
+
+eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJSRVNUVVJBTlQtQVBQIiwic3ViIjoiamFjb2JAZ21haWwuY29tIiwiaWF0IjoxNjkzNzI3MDk4LCJleHAiOjE2OTM3MzA2OTh9.AtNp3QU7fb8rYNBeOUoAEom932GkyAgE5E6hXfxgM5A
+
+Body :
+
+{ "userEmail":"jacob@gmail.com" }
+
+reponse-body 					
+====================================================
+
+a. If order found and deleted 				
+
+{							status : 200 OK
+
+    "httpStatus": "OK",
+    "message": "User deleted successfully"
+}
+
+b. If user not found 
+
+{							status : 404 Not Found
+    "message": "User does not exist.",
+    "httpStatus": "NOT_FOUND"
+}
+
+------------------------------------------------------------------------------------------------------
+11. POST - http://localhost:8080/user/view
+------------------------------------------------------------------------------------------------------
+
+request-body 
+====================================================
+
+Bearer token : 
+
+eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJSRVNUVVJBTlQtQVBQIiwic3ViIjoiamFjb2JAZ21haWwuY29tIiwiaWF0IjoxNjkzNzI3MDk4LCJleHAiOjE2OTM3MzA2OTh9.AtNp3QU7fb8rYNBeOUoAEom932GkyAgE5E6hXfxgM5A
+
+Body :
+
+{ "userEmail":"jacob@gmail.com" }
+
+reponse-body 					
+====================================================
+
+a. If user found 				
+
+{							status : 200 OK
+
+    "userNamee": "Jacob",
+    "userEmail": "jacob@gmail.com",
+    "userMobile": "9632587410",
+    "httpStatus": "FOUND"
+}
+
+b. If user not found 
+
+{							status : 404 Not Found
+    "message": "User does not exist.",
+    "httpStatus": "NOT_FOUND"
+}
+
+------------------------------------------------------------------------------------------------------
+12. POST - http://localhost:8080/user/order/list
+------------------------------------------------------------------------------------------------------
+
+request-body 
+====================================================
+
+Bearer token : 
+
+eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJSRVNUVVJBTlQtQVBQIiwic3ViIjoiamFjb2JAZ21haWwuY29tIiwiaWF0IjoxNjkzNzI3MDk4LCJleHAiOjE2OTM3MzA2OTh9.AtNp3QU7fb8rYNBeOUoAEom932GkyAgE5E6hXfxgM5A
+
+reponse-body 					
+====================================================
+
+a. If token validates				
+
+[							status : 200 OK
+    {
+        "orderId": 9227,
+        "orderName": "Chicken Bucket extra large",
+        "orderRating": 3.0,
+        "orderItems": "Chicken 4pcs and Coke ",
+        "orderFeedback": "very Good",
+        "userEmail": "jacob@gmail.com"
+    },
+    {
+        "orderId": 6173,
+        "orderName": "peppy panner extra large with coke",
+        "orderRating": 3.0,
+        "orderItems": "Chicken 4pcs and Coke ",
+        "orderFeedback": "very Good",
+        "userEmail": "jacob@gmail.com"
+    }
+]
+
+b. If token does not validates
+
+{ }							status : 401 Unauthorized
+
+------------------------------------------------------------------------------------------------------
+13. GET - http://localhost:8080/user/list
+------------------------------------------------------------------------------------------------------
+
+request-body 
+====================================================
+
+Bearer token : 
+
+eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJSRVNUVVJBTlQtQVBQIiwic3ViIjoiamFjb2JAZ21haWwuY29tIiwiaWF0IjoxNjkzNzI3MDk4LCJleHAiOjE2OTM3MzA2OTh9.AtNp3QU7fb8rYNBeOUoAEom932GkyAgE5E6hXfxgM5A
+
+reponse-body 					
+====================================================
+
+a. If token validates				
+
+[							status : 200 OK
+    {
+        "userEmail": "akash@gmial.com",
+        "userPassword": "$2a$10$v5.fRosLVM9sJ62ZDKoYhutUOV9/kvkoEyVY/fGns.qSdW0Alu7B2",
+        "userNamee": "Akash",
+        "userMobile": "9093040282",
+        "userId": "e68ce199-773a-40e8-b938-872d0ce58b56",
+        "orderDetails": null,
+        "enabled": true,
+        "password": "$2a$10$v5.fRosLVM9sJ62ZDKoYhutUOV9/kvkoEyVY/fGns.qSdW0Alu7B2",
+        "username": "akash@gmial.com",
+        "credentialsNonExpired": true,
+        "accountNonExpired": true,
+        "accountNonLocked": true,
+        "authorities": null
+    },
+    {
+        "userEmail": "jacob@gmail.com",
+        "userPassword": "$2a$10$KVRPk/VQQu8a2Xxwr48QVe8UFYKT.UEJ7pDItqRblpQ/z1EuS1ava",
+        "userNamee": "Jacob",
+        "userMobile": "9093040282",
+        "userId": "24352f97-5883-4086-8416-25c34031ac8e",
+        "orderDetails": null,
+        "enabled": true,
+        "password": "$2a$10$KVRPk/VQQu8a2Xxwr48QVe8UFYKT.UEJ7pDItqRblpQ/z1EuS1ava",
+        "username": "jacob@gmail.com",
+        "credentialsNonExpired": true,
+        "accountNonExpired": true,
+        "accountNonLocked": true,
+        "authorities": null
+    },
+    {
+        "userEmail": "james@gmial.com",
+        "userPassword": "$2a$10$9XCU6Yo.NUEpr5SX63QZxe/V.l3FMFCU5VNzHr1AnPiSCImPB3.6q",
+        "userNamee": "James",
+        "userMobile": "9093040282",
+        "userId": "840ed084-2a9f-4f80-8fb7-9a02f599d6ab",
+        "orderDetails": null,
+        "enabled": true,
+        "password": "$2a$10$9XCU6Yo.NUEpr5SX63QZxe/V.l3FMFCU5VNzHr1AnPiSCImPB3.6q",
+        "username": "james@gmial.com",
+        "credentialsNonExpired": true,
+        "accountNonExpired": true,
+        "accountNonLocked": true,
+        "authorities": null
+    },
+    {
+        "userEmail": "paul@gmail.com",
+        "userPassword": "$2a$10$Jlk5OaV8O7TDk/Lpg7vQI.rkAM.8XZiec2yGwCMbYBtrw0FBoger.",
+        "userNamee": "Paul",
+        "userMobile": "9093040282",
+        "userId": "6b155eb1-b89e-4dc9-b8f7-fdb447903a7e",
+        "orderDetails": null,
+        "enabled": true,
+        "password": "$2a$10$Jlk5OaV8O7TDk/Lpg7vQI.rkAM.8XZiec2yGwCMbYBtrw0FBoger.",
+        "username": "paul@gmail.com",
+        "credentialsNonExpired": true,
+        "accountNonExpired": true,
+        "accountNonLocked": true,
+        "authorities": null
+    }
+]
+
+b. If token does not validates
+
+{  }							status : 401 Unauthorized
+

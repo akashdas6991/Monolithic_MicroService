@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface JwtRepository extends JpaRepository<JwtDetails, Integer> {
 
-    JwtDetails findByUser(String user);
+    JwtDetails findByUserEmail(String userEmail);
 
 }

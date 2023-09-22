@@ -162,7 +162,7 @@ public class JwtService
         ModelMap response = new ModelMap();
         String token = this.getToken(request);
         String email = this.getUsernameFromToken(token);
-        JwtDetails jwtDetails = jwtTokenRepository.findByUser(email);
+        JwtDetails jwtDetails = jwtTokenRepository.findByUserEmail(email);
         DecodedJWT decodedJWT = jwtTokenDecode(token);
 
         if((jwtDetails == null)  || ( !jwtDetails.getToken().equals(token)  )) {

@@ -4,15 +4,18 @@ import com.auth.service.entity.CustomUserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 
 @Service
 public interface AuthService {
 
-    public ModelMap userSignUp(CustomUserDetails user);
+    ModelMap signIn(CustomUserDetails customUserDetails);
 
-    public ModelMap userSignIn(CustomUserDetails user);
+    ModelMap signUp(CustomUserDetails customUserDetails);
 
-    public CustomUserDetails userDetailByUserId(String userId);
+    ModelMap signOut(CustomUserDetails customUserDetails, HttpServletRequest request);
+
+    ModelMap jwtValidate(HttpServletRequest request);
 
 }

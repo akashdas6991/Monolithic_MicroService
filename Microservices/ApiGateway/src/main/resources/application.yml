@@ -17,16 +17,17 @@ spring:
         - id: USER-SERVICE
           uri: lb://USER-SERVICE
           predicates :
-            - Path= /users/**
+            - Path= /user/**
           filters:
             - JwtAuthenticationFilter
 
-        - id: RATING-SERVICE
-          uri: lb://RATING-SERVICE
+        - id: ORDER-SERVICE
+          uri: lb://ORDER-SERVICE
           predicates:
-            - Path= /ratings/**
+            - Path= /order/**
           filters:
             - JwtAuthenticationFilter
+
 
 
 #Eureka Client Config

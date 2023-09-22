@@ -27,32 +27,41 @@ public class AuthController {
     @Autowired
     private JwtService jwtService;
 
-    /***************************************** user *****************************************/
+    /******************************** USER ******************************************/
 
     @PostMapping("/user/signUp")
-    public ResponseEntity<ModelMap> userSignUp(@RequestBody CustomUserDetails user)
-    {
-        ModelMap response = authService.userSignUp(user);
+    private ResponseEntity<ModelMap> signUp(@RequestBody CustomUserDetails customUserDetails){
+
+        ModelMap response = authService.signUp(customUserDetails);
 
         return ResponseEntity.status((HttpStatus) response.get("httpStatus")).body(response);
     }
 
     @PostMapping("/user/signIn")
-    public ResponseEntity<ModelMap> userSignIn(@RequestBody CustomUserDetails user )
-    {
-        ModelMap response = authService.userSignIn(user);
+    private ResponseEntity<ModelMap> signIn(@RequestBody CustomUserDetails customUserDetails){
+
+        ModelMap response = authService.signIn(customUserDetails);
 
         return ResponseEntity.status((HttpStatus) response.get("httpStatus")).body(response);
     }
 
-    /******************************************* JWT ********************************************/
-
-    @GetMapping("/jwt/token")
-    public ResponseEntity<ModelMap> validateToken(HttpServletRequest request)
+    @PostMapping("/user/signOut")
+    private ResponseEntity<ModelMap> signOut(@RequestBody CustomUserDetails customUserDetails ,
+                                             HttpServletRequest request)
     {
-        ModelMap response = jwtService.validateToken(request);
+        ModelMap response = authService.signOut(customUserDetails,request);
 
         return ResponseEntity.status((HttpStatus) response.get("httpStatus")).body(response);
+    }
+
+    /******************************** JWT ******************************************/
+
+    @GetMapping("/jwt/token/validate")
+    private ResponseEntity<ModelMap> jwtValidate(HttpServletRequest request){
+
+        ModelMap response = authService.jwtValidate(request);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
 }

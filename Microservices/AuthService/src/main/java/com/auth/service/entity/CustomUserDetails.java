@@ -18,11 +18,12 @@ import java.util.Collection;
 public class CustomUserDetails implements UserDetails {
 
     @Id
-    private String email;
-    private String userId;
-    private String name;
-    private String password;
+    private String userEmail;
+    private String userNamee;
+    private String userMobile;
+    private String userPassword;
     private boolean enabled; //mandatory field //if true -> user found / else -> not found
+    private String userId;
 
     /************** Unimplemented method from UserDetails **************/
 
@@ -32,8 +33,13 @@ public class CustomUserDetails implements UserDetails {
     }
 
     @Override
+    public String getPassword() {
+        return null;
+    }
+
+    @Override
     public String getUsername() {
-        return this.email;
+        return null;
     }
 
     @Override

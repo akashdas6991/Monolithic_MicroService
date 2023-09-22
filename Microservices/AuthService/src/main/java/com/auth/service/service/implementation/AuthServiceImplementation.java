@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -27,38 +28,43 @@ public class AuthServiceImplementation implements AuthService {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private UserRepository authRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    private JwtRepository jwtTokenRepository;
+    private JwtRepository jwtRepository;
 
     @Autowired
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private JwtService jwtTokenService;
+    private JwtService jwtService;
 
     @Override
-    public ModelMap userSignUp(CustomUserDetails user)
-    {
+    public ModelMap signUp(CustomUserDetails customUserDetails) {
+
         ModelMap response = new ModelMap();
-        CustomUserDetails userExistOrNot = userDetailByUserId(user.getEmail());
 
-        if(userExistOrNot == null)
+        CustomUserDetails customUserDetailsFound = userRepository.findByUserEmail(customUserDetails.getUserEmail());
+
+        if(customUserDetailsFound == null)
         {
-            String userId = UUID.randomUUID().toString();
-            String password = passwordEncoder.encode(user.getPassword());
-            user.setUserId(userId);
-            user.setPassword(password);
-            CustomUserDetails userSignedUp  =  authRepository.save(user);
+            //user not found , Sign Up
+            customUserDetails.setUserId(UUID.randomUUID().toString());
+            customUserDetails.setUserPassword(passwordEncoder.encode(customUserDetails.getUserPassword()));
+            customUserDetails.setEnabled(true);
 
-            response.put("name",userSignedUp.getName());
-            response.put("email",userSignedUp.getEmail());
+            CustomUserDetails customUserDetailsSaved = userRepository.save(customUserDetails);
+
+            response.put("userNamee",customUserDetailsSaved.getUserNamee());
+            response.put("userEmail",customUserDetailsSaved.getUserEmail());
+            response.put("userMobile",customUserDetailsSaved.getUserMobile());
             response.put("httpStatus", HttpStatus.CREATED);
+            response.put("message", "Signed Up Successfully.");
         }
         else
         {
-            response.put("message","user exist");
+            //user found , Sign In
+            response.put("message", "User already exist.Please Sign In.");
             response.put("httpStatus", HttpStatus.FOUND);
         }
 
@@ -66,64 +72,132 @@ public class AuthServiceImplementation implements AuthService {
     }
 
     @Override
-    public ModelMap userSignIn(CustomUserDetails user) {
-
-        //Que1
-        final Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken( user.getEmail()  , user.getPassword() ));
-
-        //Que2
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        //Que3
-        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+    public ModelMap signIn(CustomUserDetails customUserDetails) {
 
         ModelMap response = new ModelMap();
 
-        if(customUserDetails == null)
+        CustomUserDetails customUserDetailsFound = userRepository.findByUserEmail(customUserDetails.getUserEmail());
+
+        if(customUserDetailsFound != null && !passwordEncoder.matches(customUserDetails.getUserPassword(), customUserDetailsFound.getUserPassword() ))
         {
-            response.put("message","user not exist");
-            response.put("httpStatus", HttpStatus.NOT_FOUND);
+            //user found , Incorrect password
+            response.put("message", "Incorrect Password");
+            response.put("httpStatus", HttpStatus.UNAUTHORIZED);
+        }
+        else if(customUserDetailsFound != null && passwordEncoder.matches(customUserDetails.getUserPassword(), customUserDetailsFound.getUserPassword() ))
+        {
+            //user found , correct password , Find if any token exist
+            JwtDetails jwtDetails = jwtRepository.findByUserEmail(customUserDetails.getUserEmail());
+
+            if(jwtDetails == null)
+            {
+                //user found , no token exist , create new token , save in db , give token
+                JwtDetails jwtDetailsSave = new JwtDetails();
+                jwtDetailsSave.setUserEmail(customUserDetails.getUserEmail());
+                jwtDetailsSave.setToken(jwtService.generateToken(customUserDetailsFound.getUserEmail()));
+                JwtDetails jwtDetailsSaved = jwtRepository.save(jwtDetailsSave);
+                response.put("token",jwtDetailsSaved.getToken());
+            }
+            else
+            {
+                //user found , token exist , check token ifExpired
+                DecodedJWT decodedJWT = jwtService.jwtTokenDecode(jwtDetails.getToken());
+                boolean isJwtTokenExpired = jwtService.isJwtTokenExpired(decodedJWT);
+
+                if(isJwtTokenExpired)
+                {
+                    //user found , token exist , token expired , generate new token , update in db , give token
+                    jwtDetails.setToken(jwtService.generateToken(customUserDetailsFound.getUserEmail()));
+                    JwtDetails jwtDetailsSaved = jwtRepository.save(jwtDetails);
+                    response.put("token",jwtDetailsSaved.getToken());
+                }
+                else
+                {
+                    //user found , token exist , token not expired , give token
+                    response.put("token",jwtDetails.getToken());
+                }
+            }
+
+            //user found , give user details
+            response.put("userNamee",customUserDetailsFound.getUserNamee());
+            response.put("userEmail",customUserDetailsFound.getUserEmail());
+            response.put("userMobile",customUserDetailsFound.getUserMobile());
+            response.put("message", "Signed In Successfully.");
+            response.put("httpStatus", HttpStatus.FOUND);
         }
         else
         {
-            String   jwtToken="";
-            JwtDetails jwtTokenObj = jwtTokenRepository.findByUser(customUserDetails.getEmail());
+            //user not found , Sign Up
+            response.put("message", "Please Sign Up.");
+            response.put("httpStatus", HttpStatus.NOT_FOUND);
+        }
 
-            if(jwtTokenObj != null)
+        return response;
+    }
+
+    @Override
+    public ModelMap signOut(CustomUserDetails customUserDetails,HttpServletRequest request)
+    {
+        ModelMap response = new ModelMap();
+
+        //get the token
+        String tokenFromRequest = jwtService.getToken(request);
+        //get the user from token
+        String userEmailFromToken = jwtService.getUsernameFromToken(tokenFromRequest);
+        //get the user from request
+        String userEmailFromRequest = customUserDetails.getUserEmail();
+
+        //verify both userEmail are same
+        if(userEmailFromToken.compareToIgnoreCase(userEmailFromRequest) == 0)
+        {
+            //if verified , verify the request token with db token
+            JwtDetails jwtDetails =  jwtRepository.findByUserEmail(userEmailFromRequest);
+
+            //verify token
+            if(tokenFromRequest.compareToIgnoreCase(jwtDetails.getToken()) == 0)
             {
-                DecodedJWT decodedJWT = jwtTokenService.jwtTokenDecode(jwtTokenObj.getToken());
+                //if token verified , delete now
+                jwtRepository.delete(jwtDetails);
 
-                boolean  isTokenExpired = jwtTokenService.isJwtTokenExpired(decodedJWT);
+                //verify deletion success
+                JwtDetails jwtDetailsFind = jwtRepository.findByUserEmail(jwtDetails.getUserEmail());
 
-                if(isTokenExpired)
+                if(jwtDetailsFind == null)
                 {
-                    jwtToken = jwtTokenService.generateToken(customUserDetails.getUsername());
-                    jwtTokenObj.setToken(jwtToken);
-                    jwtTokenObj = jwtTokenRepository.save(jwtTokenObj);
+                    //data null, deletion successful
+                    response.put("message","Signed Out Successfully.");
+                    response.put("httpStatus",HttpStatus.OK);
+                }
+                else
+                {
+                    //data still in db , deletion failed
+                    response.put("message","Sign Out Failed.");
+                    response.put("httpStatus",HttpStatus.NOT_ACCEPTABLE);
                 }
             }
             else
             {
-                jwtTokenObj = new JwtDetails();
-
-                jwtToken = jwtTokenService.generateToken(customUserDetails.getUsername());
-                jwtTokenObj.setToken(jwtToken);
-                jwtTokenObj.setUser(customUserDetails.getUsername());
-                jwtTokenObj = jwtTokenRepository.save(jwtTokenObj);
+                //token not verified , illegal token
+                response.put("message","Illegal token");
+                response.put("httpStatus",HttpStatus.NOT_ACCEPTABLE);
             }
-
-            response.put("token",jwtTokenObj.getToken());
-            response.put("name",customUserDetails.getName());
-            response.put("email",customUserDetails.getEmail());
-            response.put("httpStatus", HttpStatus.FOUND);
+        }
+        else
+        {
+            // not verified , token is illegal
+            response.put("message","Illegal token");
+            response.put("httpStatus",HttpStatus.NOT_ACCEPTABLE);
         }
 
         return response;
     }
 
     @Override
-    public CustomUserDetails userDetailByUserId(String email) {
-        return authRepository.findByEmail(email);
+    public ModelMap jwtValidate(HttpServletRequest request)
+    {
+        ModelMap response = jwtService.validateToken(request);
+
+        return response;
     }
 
 }

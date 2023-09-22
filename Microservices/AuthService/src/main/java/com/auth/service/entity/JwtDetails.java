@@ -16,7 +16,7 @@ public class JwtDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    private String user;
+    private String userEmail;
     private String token;
 
 }
