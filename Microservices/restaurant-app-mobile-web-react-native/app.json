@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "resturant-app-mobile-web",
-    "slug": "resturant-app-mobile-web",
+    "name": "restaurant-app-mobile-web-react-native",
+    "slug": "restaurant-app-mobile-web-react-native",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
