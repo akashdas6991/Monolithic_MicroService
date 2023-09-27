@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Heading, Text, Center, NativeBaseProvider, Link, PresenceTransition, VStack, HStack, Alert, Avatar, AspectRatio, Image, Stack, Flex, Spacer, ScrollView, Divider, StatusBar, IconButton, Icon, Input, Button, ChevronDownIcon, Menu, HamburgerIcon } from "native-base";
+import { Box, Heading, Text, Center, NativeBaseProvider, Link, PresenceTransition, VStack, HStack, Alert, Avatar, AspectRatio, Image, Stack, Flex, Spacer, ScrollView, Divider, StatusBar, IconButton, Icon, Input, Button, ChevronDownIcon, Menu, HamburgerIcon, Popover } from "native-base";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import apiService from './service/apiService';
 import { NavigationContainer } from '@react-navigation/native';
@@ -19,6 +19,11 @@ const Home = ({ props, navigation }) => {
 
     const firstMenuItems = apiService.firstMenuItems();
     const secondMenuItems = apiService.secondMenuItems();
+
+    let count = 0;
+
+
+
 
     const windowWidth = Dimensions.get('window').width;
     const windowHeight = Dimensions.get('window').height;
@@ -216,11 +221,11 @@ const Home = ({ props, navigation }) => {
                             Home
                         </Text>
                     </HStack>
-                    <HStack w={"63%"} borderRadius={5}  borderWidth={"1px"} borderColor={"gray.300"}>
+                    <HStack w={"63%"} borderRadius={5} borderWidth={"1px"} borderColor={"gray.300"} shadow={3}>
                         <HStack w={"35%"} alignItems={'center'} justifyContent={'space-between'}>
                             <HStack>
                                 <Icon as={<MaterialIcons name="location-on" />} color={"red.400"} size={6} m={"6px"} />
-                                <Input w={"80%"} variant="unstyled" placeholder="Kolkata" fontSize={'sm'}  />
+                                <Input w={"80%"} variant="unstyled" placeholder="Kolkata" fontSize={'sm'} />
                             </HStack>
                             <HStack >
                                 <Menu mt={5} bgColor={"white"} placement='bottom right' w={"240px"} trigger={triggerProps => {
@@ -228,8 +233,7 @@ const Home = ({ props, navigation }) => {
                                         <Icon as={<FontAwesome name="caret-down" />} size={5} />
                                     </Pressable>;
                                 }}>
-
-                                    <Menu.Item h={"60px"}>  
+                                    <Menu.Item h={"60px"}>
                                         <HStack>
                                             <Icon as={<MaterialIcons name="my-location" />} color={"red.400"} size={5} />
                                         </HStack>
@@ -242,7 +246,7 @@ const Home = ({ props, navigation }) => {
                                             </VStack>
                                         </HStack>
                                     </Menu.Item>
-                                    <Divider w="100%" color={'gray.500'}/>
+                                    <Divider w="100%" color={'gray.500'} />
                                     <Menu.Item h={"60px"} pt={5}>
                                         <HStack>
                                             <Icon as={<FontAwesome5 name="plus" />} color={"red.400"} size={5} />
@@ -255,7 +259,7 @@ const Home = ({ props, navigation }) => {
                                             </VStack>
                                         </HStack>
                                     </Menu.Item>
-                                    <Divider  w="100%" color={'gray.500'}/>
+                                    <Divider w="100%" color={'gray.500'} />
                                     <Menu.Group title="Saved Addresses">
                                         <Menu.Item h={"60px"}>
                                             <HStack>
@@ -287,7 +291,6 @@ const Home = ({ props, navigation }) => {
                                 </Menu>
                             </HStack>
                         </HStack>
-
 
                         <Divider orientation="vertical" my={"1px"} bg="gray.200" />
 
@@ -355,7 +358,6 @@ const Home = ({ props, navigation }) => {
                         <Heading fontWeight={'semibold'} size="lg" mb={2}>
                             Eat what makes you happy
                         </Heading>
-
                         <ScrollView horizontal showsHorizontalScrollIndicator={false} >
                             <HStack space={"2xl"} justifyContent="center" p={3}>
                                 {
@@ -363,7 +365,12 @@ const Home = ({ props, navigation }) => {
 
                                         return (
                                             <VStack alignItems={'center'} space={1} key={item.id} >
-                                                <Avatar m={2} source={{ uri: String(item.img) }} width={["60px", "80px", "150px"]} height={["60px", "80px", "150px"]} />
+                                                <Pressable >
+                                                    {({ pressed }) => (
+                                                        <Avatar {...pressed ? alert('Pressed!') : 'Press Me'} m={2} source={{ uri: String(item.img) }} width={["60px", "80px", "150px"]} height={["60px", "80px", "150px"]} />
+                                                    )}
+                                                </Pressable>
+
                                                 <Text fontSize={["sm", "md", "lg"]} fontWeight={'semibold'} > {item.name} </Text>
                                             </VStack>
                                         )
@@ -378,7 +385,6 @@ const Home = ({ props, navigation }) => {
                     <Heading fontWeight={'normal'} size="lg" mt={10} mb={10}>
                         Top brands for you
                     </Heading>
-
                     <ScrollView horizontal showsHorizontalScrollIndicator={false} p={"2"} bg={"white"}>
                         <HStack space={"2xl"} justifyContent="center" p={3}>
                             {
@@ -386,7 +392,11 @@ const Home = ({ props, navigation }) => {
 
                                     return (
                                         <VStack alignItems={'center'} space={3} key={item.id} >
-                                            <Avatar size={"2xl"} source={{ uri: String(item.img) }} width={["60px", "80px", "150px"]} height={["60px", "80px", "150px"]} />
+                                            <Pressable >
+                                                {({ pressed }) => (
+                                                    <Avatar {...pressed ? alert('Pressed!') : 'Press Me'} size={"2xl"} source={{ uri: String(item.img) }} width={["60px", "80px", "150px"]} height={["60px", "80px", "150px"]} />
+                                                )}
+                                            </Pressable>
                                             <Text fontSize={["xs", "sm", "md"]} fontWeight={'normal'}  > {item.name} </Text>
                                             <Text fontSize={["2xs", "xs", "sm"]} fontWeight={'normal'} > {item.distance} </Text>
                                         </VStack>
@@ -397,259 +407,286 @@ const Home = ({ props, navigation }) => {
                     </ScrollView>
                 </Box>
 
-                <Box w={"82%"} alignSelf={'center'}>
-
-                    <Heading fontWeight={'normal'} size="lg" mt={10} mb={10}>
-                        Best Food in Kolkata
-                    </Heading>
-
-                    {(() => {
+                {/* {(() => {
                         if (Platform.OS === 'web') {
                             return console.log("web");
                         }
                         else {
                             return console.log("mob");
                         }
-                    })()}
+                })()} */}
 
+                <Box w={"82%"} alignSelf={'center'}>
+                    <Heading fontWeight={'normal'} size="lg" mt={10} mb={10}>
+                        Best Food in Kolkata
+                    </Heading>
                     <HStack space={12} bgColor={'white'}>
-                        <VStack width={"30%"}  >
-                            <Box w={"100%"} bgColor={"white"} borderRadius={10}>
-                                <Box borderRadius={2}>
-                                    <AspectRatio w="99%" ratio={4 / 3}>
-                                        <Image borderRadius={12} source={{
-                                            uri: "https://b.zmtcdn.com/data/pictures/chains/9/21429/d505be0b3ee11e4f79581b7b9df2d04a_o2_featured_v2.jpg?output-format=webp"
-                                        }} alt="image" />
-                                    </AspectRatio>
-                                </Box>
-                                <Stack p="4" space={3}>
-                                    <Stack space={2}>
-                                        <HStack justifyContent={'space-between'}>
-                                            <Heading fontWeight={'semibold'} size="md" >
-                                                Allen Kitchen
-                                            </Heading>
-                                            <Center bg="green.700" mt={1} borderRadius={6} pr={1} pl={1} _text={{ color: "white", fontWeight: "bold", fontSize: "xs" }} h={5} >
-                                                <HStack>
-                                                    <Text color={"white"} fontWeight={'bold'}>4.2 </Text>
-                                                    <Icon as={<FontAwesome5 name="star" />} color={"white"} size={"10px"} mt={"5px"} />
-                                                </HStack>
-                                            </Center>
-                                        </HStack>
-                                        <HStack justifyContent={'space-between'} >
-                                            <Text fontSize="sm" color={'gray.500'} fontWeight="normal" >
-                                                Bengali , Seafood
-                                            </Text>
-                                            <Text color={'gray.500'}>₹100 for one</Text>
-                                        </HStack>
-                                        <HStack justifyContent={'flex-end'} >
-                                            <Text>24 min</Text>
-                                        </HStack>
+                        <VStack width={"30%"} >
+
+                            <Pressable onPress={() => alert("I'm Pressed")}>
+
+                                <Box w={"100%"} bgColor={"white"} borderRadius={10} >
+
+
+
+                                    <Box borderRadius={2}>
+                                        <AspectRatio w="99%" ratio={4 / 3}>
+                                            <Image borderRadius={12} source={{ uri: "https://b.zmtcdn.com/data/pictures/chains/9/21429/d505be0b3ee11e4f79581b7b9df2d04a_o2_featured_v2.jpg?output-format=webp" }} alt="image" />
+                                        </AspectRatio>
+                                    </Box>
+                                    <Stack p="4" space={3}>
+                                        <Stack space={2}>
+                                            <HStack justifyContent={'space-between'}>
+                                                <Heading fontWeight={'semibold'} size="md" >
+                                                    Allen Kitchen
+                                                </Heading>
+                                                <Center bg="green.700" mt={1} borderRadius={6} pr={1} pl={1} _text={{ color: "white", fontWeight: "bold", fontSize: "xs" }} h={5} >
+                                                    <HStack>
+                                                        <Text color={"white"} fontWeight={'bold'}>4.2 </Text>
+                                                        <Icon as={<FontAwesome5 name="star" />} color={"white"} size={"10px"} mt={"5px"} />
+                                                    </HStack>
+                                                </Center>
+                                            </HStack>
+                                            <HStack justifyContent={'space-between'} >
+                                                <Text fontSize="sm" color={'gray.500'} fontWeight="normal" >
+                                                    Bengali , Seafood
+                                                </Text>
+                                                <Text color={'gray.500'}>₹100 for one</Text>
+                                            </HStack>
+                                            <HStack justifyContent={'flex-end'} >
+                                                <Text>24 min</Text>
+                                            </HStack>
+                                        </Stack>
                                     </Stack>
-                                </Stack>
-                            </Box>
+
+
+
+                                </Box>
+
+                            </Pressable>
                         </VStack>
 
                         <VStack width={"30%"}  >
-                            <Box w={"100%"} bgColor={"white"} borderRadius={10}>
-                                <Box borderRadius={2}>
-                                    <AspectRatio w="100%" ratio={4 / 3}>
-                                        <Image w="99%" borderRadius={12} source={{
-                                            uri: "https://b.zmtcdn.com/data/pictures/chains/5/23295/24d8c0a94d2d43259d290d13eab03b17_o2_featured_v2.jpg?output-format=webp"
-                                        }} alt="image" />
-                                    </AspectRatio>
-                                    <Center bg="blue.500" _text={{
-                                        color: "warmGray.50",
-                                        fontWeight: "400",
-                                        fontSize: "xs"
-                                    }} position="absolute" borderTopRightRadius={2} borderBottomRightRadius={2} bottom="2" px="1.5" py="0.3">
-                                        20% OFF
-                                    </Center>
-                                </Box>
-                                <Stack p="4" space={3}>
-                                    <Stack space={2}>
-                                        <HStack justifyContent={'space-between'}>
-                                            <Heading fontWeight={'semibold'} size="md" >
-                                                Denzong Kitchen
-                                            </Heading>
-                                            <Center bg="green.700" mt={1} borderRadius={6} pr={1} pl={1} _text={{ color: "white", fontWeight: "bold", fontSize: "xs" }} h={5} >
-                                                <HStack>
-                                                    <Text color={"white"} fontWeight={'bold'}>3.9 </Text>
-                                                    <Icon as={<FontAwesome5 name="star" />} color={"white"} size={"10px"} mt={"5px"} />
-                                                </HStack>
-                                            </Center>
-                                        </HStack>
-                                        <HStack justifyContent={'space-between'} >
-                                            <Text fontSize="sm" color={'gray.500'} fontWeight="normal" >
-                                                Momos , Chinese , Tib..
-                                            </Text>
-                                            <Text color={'gray.500'}>₹100 for one</Text>
-                                        </HStack>
-                                        <HStack justifyContent={'flex-end'} >
-                                            <Text>56 min</Text>
-                                        </HStack>
+
+                            <Pressable onPress={() => alert("I'm Pressed")}>
+
+                                <Box w={"100%"} bgColor={"white"} borderRadius={10}>
+                                    <Box borderRadius={2}>
+                                        <AspectRatio w="100%" ratio={4 / 3}>
+                                            <Image w="99%" borderRadius={12} source={{ uri: "https://b.zmtcdn.com/data/pictures/chains/5/23295/24d8c0a94d2d43259d290d13eab03b17_o2_featured_v2.jpg?output-format=webp" }} alt="image" />
+                                        </AspectRatio>
+                                        <Center bg="blue.500" _text={{
+                                            color: "warmGray.50",
+                                            fontWeight: "400",
+                                            fontSize: "xs"
+                                        }} position="absolute" borderTopRightRadius={2} borderBottomRightRadius={2} bottom="2" px="1.5" py="0.3">
+                                            20% OFF
+                                        </Center>
+                                    </Box>
+                                    <Stack p="4" space={3}>
+                                        <Stack space={2}>
+                                            <HStack justifyContent={'space-between'}>
+                                                <Heading fontWeight={'semibold'} size="md" >
+                                                    Denzong Kitchen
+                                                </Heading>
+                                                <Center bg="green.700" mt={1} borderRadius={6} pr={1} pl={1} _text={{ color: "white", fontWeight: "bold", fontSize: "xs" }} h={5} >
+                                                    <HStack>
+                                                        <Text color={"white"} fontWeight={'bold'}>3.9 </Text>
+                                                        <Icon as={<FontAwesome5 name="star" />} color={"white"} size={"10px"} mt={"5px"} />
+                                                    </HStack>
+                                                </Center>
+                                            </HStack>
+                                            <HStack justifyContent={'space-between'} >
+                                                <Text fontSize="sm" color={'gray.500'} fontWeight="normal" >
+                                                    Momos , Chinese , Tib..
+                                                </Text>
+                                                <Text color={'gray.500'}>₹100 for one</Text>
+                                            </HStack>
+                                            <HStack justifyContent={'flex-end'} >
+                                                <Text>56 min</Text>
+                                            </HStack>
+                                        </Stack>
                                     </Stack>
-                                </Stack>
-                            </Box>
+                                </Box>
+
+                            </Pressable>
+
                         </VStack>
 
                         <VStack width={"30%"}  >
-                            <Box w={"100%"} bgColor={"white"} borderRadius={10}>
-                                <Box >
-                                    <AspectRatio w="99%" ratio={4 / 3} >
-                                        <Image borderRadius={12} source={{
-                                            uri: "https://b.zmtcdn.com/data/pictures/chains/0/22460/045fa3e9db1354d1675baacc778cd33b_o2_featured_v2.jpg?output-format=webp"
-                                        }} alt="image" />
-                                    </AspectRatio>
-                                </Box>
-                                <Stack p="4" space={3}>
-                                    <Stack space={2}>
-                                        <HStack justifyContent={'space-between'}>
-                                            <Heading fontWeight={'semibold'} size="md" >
-                                                AnnaRas - Since 1989
-                                            </Heading>
-                                            <Center bg="green.700" mt={1} borderRadius={6} pr={1} pl={1} _text={{ color: "white", fontWeight: "bold", fontSize: "xs" }} h={5} >
-                                                <HStack>
-                                                    <Text color={"white"} fontWeight={'bold'}>4.5 </Text>
-                                                    <Icon as={<FontAwesome5 name="star" />} color={"white"} size={"10px"} mt={"5px"} />
-                                                </HStack>
-                                            </Center>
-                                        </HStack>
-                                        <HStack justifyContent={'space-between'} >
-                                            <Text fontSize="sm" color={'gray.500'} fontWeight="normal" >
-                                                Gujarati , Street Food ,
-                                            </Text>
-                                            <Text color={'gray.500'}>₹100 for one</Text>
-                                        </HStack>
-                                        <HStack justifyContent={'flex-end'} >
-                                            <Text>32 min</Text>
-                                        </HStack>
+
+                            <Pressable onPress={() => alert("I'm Pressed")}>
+
+                                <Box w={"100%"} bgColor={"white"} borderRadius={10}>
+                                    <Box >
+                                        <AspectRatio w="99%" ratio={4 / 3} >
+                                            <Image borderRadius={12} source={{ uri: "https://b.zmtcdn.com/data/pictures/chains/0/22460/045fa3e9db1354d1675baacc778cd33b_o2_featured_v2.jpg?output-format=webp" }} alt="image" />
+                                        </AspectRatio>
+                                    </Box>
+                                    <Stack p="4" space={3}>
+                                        <Stack space={2}>
+                                            <HStack justifyContent={'space-between'}>
+                                                <Heading fontWeight={'semibold'} size="md" >
+                                                    AnnaRas - Since 1989
+                                                </Heading>
+                                                <Center bg="green.700" mt={1} borderRadius={6} pr={1} pl={1} _text={{ color: "white", fontWeight: "bold", fontSize: "xs" }} h={5} >
+                                                    <HStack>
+                                                        <Text color={"white"} fontWeight={'bold'}>4.5 </Text>
+                                                        <Icon as={<FontAwesome5 name="star" />} color={"white"} size={"10px"} mt={"5px"} />
+                                                    </HStack>
+                                                </Center>
+                                            </HStack>
+                                            <HStack justifyContent={'space-between'} >
+                                                <Text fontSize="sm" color={'gray.500'} fontWeight="normal" >
+                                                    Gujarati , Street Food ,
+                                                </Text>
+                                                <Text color={'gray.500'}>₹100 for one</Text>
+                                            </HStack>
+                                            <HStack justifyContent={'flex-end'} >
+                                                <Text>32 min</Text>
+                                            </HStack>
+                                        </Stack>
                                     </Stack>
-                                </Stack>
-                            </Box>
+                                </Box>
+
+                            </Pressable>
+
                         </VStack>
                     </HStack>
 
                     <HStack space={12} bgColor={'white'}>
                         <VStack width={"30%"}  >
-                            <Box w={"100%"} bgColor={"white"} borderRadius={10}>
-                                <Box borderRadius={2}>
-                                    <AspectRatio w="99%" ratio={4 / 3}>
-                                        <Image borderRadius={12} source={{
-                                            uri: "https://b.zmtcdn.com/data/pictures/chains/2/19418342/2a1d62b543591043a7d640f464811427_o2_featured_v2.jpg?output-format=webp"
-                                        }} alt="image" />
-                                    </AspectRatio>
-                                    <Center bg="blue.500" _text={{
-                                        color: "warmGray.50",
-                                        fontWeight: "400",
-                                        fontSize: "xs"
-                                    }} position="absolute" borderTopRightRadius={2} borderBottomRightRadius={2} bottom="2" px="1.5" py="0.3">
-                                        ₹125 OFF
-                                    </Center>
-                                </Box>
-                                <Stack p="4" space={3}>
-                                    <Stack space={2}>
-                                        <HStack justifyContent={'space-between'}>
-                                            <Heading fontWeight={'semibold'} size="md" >
-                                                Shangai
-                                            </Heading>
-                                            <Center bg="green.700" mt={1} borderRadius={6} pr={1} pl={1} _text={{ color: "white", fontWeight: "bold", fontSize: "xs" }} h={5} >
-                                                <HStack>
-                                                    <Text color={"white"} fontWeight={'bold'}>4.1 </Text>
-                                                    <Icon as={<FontAwesome5 name="star" />} color={"white"} size={"10px"} mt={"5px"} />
-                                                </HStack>
-                                            </Center>
-                                        </HStack>
-                                        <HStack justifyContent={'space-between'} >
-                                            <Text fontSize="sm" color={'gray.500'} fontWeight="normal" >
-                                                Chinese , Sichuan
-                                            </Text>
-                                            <Text color={'gray.500'}>₹100 for one</Text>
-                                        </HStack>
-                                        <HStack justifyContent={'flex-end'} >
-                                            <Text>51 min</Text>
-                                        </HStack>
+
+                            <Pressable onPress={() => alert("I'm Pressed")}>
+
+                                <Box w={"100%"} bgColor={"white"} borderRadius={10}>
+                                    <Box borderRadius={2}>
+                                        <AspectRatio w="99%" ratio={4 / 3}>
+                                            <Image borderRadius={12} source={{ uri: "https://b.zmtcdn.com/data/pictures/chains/2/19418342/2a1d62b543591043a7d640f464811427_o2_featured_v2.jpg?output-format=webp" }} alt="image" />
+                                        </AspectRatio>
+                                        <Center bg="blue.500" _text={{
+                                            color: "warmGray.50",
+                                            fontWeight: "400",
+                                            fontSize: "xs"
+                                        }} position="absolute" borderTopRightRadius={2} borderBottomRightRadius={2} bottom="2" px="1.5" py="0.3">
+                                            ₹125 OFF
+                                        </Center>
+                                    </Box>
+                                    <Stack p="4" space={3}>
+                                        <Stack space={2}>
+                                            <HStack justifyContent={'space-between'}>
+                                                <Heading fontWeight={'semibold'} size="md" >
+                                                    Shangai
+                                                </Heading>
+                                                <Center bg="green.700" mt={1} borderRadius={6} pr={1} pl={1} _text={{ color: "white", fontWeight: "bold", fontSize: "xs" }} h={5} >
+                                                    <HStack>
+                                                        <Text color={"white"} fontWeight={'bold'}>4.1 </Text>
+                                                        <Icon as={<FontAwesome5 name="star" />} color={"white"} size={"10px"} mt={"5px"} />
+                                                    </HStack>
+                                                </Center>
+                                            </HStack>
+                                            <HStack justifyContent={'space-between'} >
+                                                <Text fontSize="sm" color={'gray.500'} fontWeight="normal" >
+                                                    Chinese , Sichuan
+                                                </Text>
+                                                <Text color={'gray.500'}>₹100 for one</Text>
+                                            </HStack>
+                                            <HStack justifyContent={'flex-end'} >
+                                                <Text>51 min</Text>
+                                            </HStack>
+                                        </Stack>
                                     </Stack>
-                                </Stack>
-                            </Box>
+                                </Box>
+
+                            </Pressable>
+
                         </VStack>
 
                         <VStack width={"30%"}  >
-                            <Box w={"100%"} bgColor={"white"} borderRadius={10}>
-                                <Box borderRadius={2}>
-                                    <AspectRatio w="100%" ratio={4 / 3}>
-                                        <Image w="99%" borderRadius={12} source={{
-                                            uri: "https://b.zmtcdn.com/data/pictures/1/21411/54778d99d9a20f5d73724971500c89ca_o2_featured_v2.jpg?output-format=webp"
-                                        }} alt="image" />
-                                    </AspectRatio>
-                                </Box>
-                                <Stack p="4" space={3}>
-                                    <Stack space={2}>
-                                        <HStack justifyContent={'space-between'}>
-                                            <Heading fontWeight={'semibold'} size="md" >
-                                                Royal Indian Hotel - Since 1905
-                                            </Heading>
-                                            <Center bg="green.700" mt={1} borderRadius={6} pr={1} pl={1} _text={{ color: "white", fontWeight: "bold", fontSize: "xs" }} h={5} >
-                                                <HStack>
-                                                    <Text color={"white"} fontWeight={'bold'}>4.2 </Text>
-                                                    <Icon as={<FontAwesome5 name="star" />} color={"white"} size={"10px"} mt={"5px"} />
-                                                </HStack>
-                                            </Center>
-                                        </HStack>
-                                        <HStack justifyContent={'space-between'} >
-                                            <Text fontSize="sm" color={'gray.500'} fontWeight="normal" >
-                                                Mughlai , Kebab
-                                            </Text>
-                                            <Text color={'gray.500'}>₹100 for one</Text>
-                                        </HStack>
-                                        <HStack justifyContent={'flex-end'} >
-                                            <Text>25 min</Text>
-                                        </HStack>
+
+                            <Pressable onPress={() => alert("I'm Pressed")}>
+
+                                <Box w={"100%"} bgColor={"white"} borderRadius={10}>
+                                    <Box borderRadius={2}>
+                                        <AspectRatio w="100%" ratio={4 / 3}>
+                                            <Image w="99%" borderRadius={12} source={{ uri: "https://b.zmtcdn.com/data/pictures/1/21411/54778d99d9a20f5d73724971500c89ca_o2_featured_v2.jpg?output-format=webp" }} alt="image" />
+                                        </AspectRatio>
+                                    </Box>
+                                    <Stack p="4" space={3}>
+                                        <Stack space={2}>
+                                            <HStack justifyContent={'space-between'}>
+                                                <Heading fontWeight={'semibold'} size="md" >
+                                                    Royal Indian Hotel - Since 1905
+                                                </Heading>
+                                                <Center bg="green.700" mt={1} borderRadius={6} pr={1} pl={1} _text={{ color: "white", fontWeight: "bold", fontSize: "xs" }} h={5} >
+                                                    <HStack>
+                                                        <Text color={"white"} fontWeight={'bold'}>4.2 </Text>
+                                                        <Icon as={<FontAwesome5 name="star" />} color={"white"} size={"10px"} mt={"5px"} />
+                                                    </HStack>
+                                                </Center>
+                                            </HStack>
+                                            <HStack justifyContent={'space-between'} >
+                                                <Text fontSize="sm" color={'gray.500'} fontWeight="normal" >
+                                                    Mughlai , Kebab
+                                                </Text>
+                                                <Text color={'gray.500'}>₹100 for one</Text>
+                                            </HStack>
+                                            <HStack justifyContent={'flex-end'} >
+                                                <Text>25 min</Text>
+                                            </HStack>
+                                        </Stack>
                                     </Stack>
-                                </Stack>
-                            </Box>
+                                </Box>
+
+                            </Pressable>
+
                         </VStack>
 
                         <VStack width={"30%"}  >
-                            <Box w={"100%"} bgColor={"white"} borderRadius={10}>
-                                <Box >
-                                    <AspectRatio w="99%" ratio={4 / 3} >
-                                        <Image borderRadius={12} source={{
-                                            uri: "https://b.zmtcdn.com/data/pictures/4/18823714/ac86d415484fa57155bc1c0a3386dfee_o2_featured_v2.jpg?output-format=webp"
-                                        }} alt="image" />
-                                    </AspectRatio>
-                                    <Center bg="blue.500" _text={{
-                                        color: "warmGray.50",
-                                        fontWeight: "400",
-                                        fontSize: "xs"
-                                    }} position="absolute" borderTopRightRadius={2} borderBottomRightRadius={2} bottom="2" px="1.5" py="0.3">
-                                        ₹125 OFF
-                                    </Center>
-                                </Box>
-                                <Stack p="4" space={3}>
-                                    <Stack space={2}>
-                                        <HStack justifyContent={'space-between'}>
-                                            <Heading fontWeight={'semibold'} size="md" >
-                                                Kake Di Hatti
-                                            </Heading>
-                                            <Center bg="green.700" mt={1} borderRadius={6} pr={1} pl={1} _text={{ color: "white", fontWeight: "bold", fontSize: "xs" }} h={5} >
-                                                <HStack>
-                                                    <Text color={"white"} fontWeight={'bold'}>3.9 </Text>
-                                                    <Icon as={<FontAwesome5 name="star" />} color={"white"} size={"10px"} mt={"5px"} />
-                                                </HStack>
-                                            </Center>
-                                        </HStack>
-                                        <HStack justifyContent={'space-between'} >
-                                            <Text fontSize="sm" color={'gray.500'} fontWeight="normal" >
-                                                North Indian , Mughlai
-                                            </Text>
-                                            <Text color={'gray.500'}>₹100 for one</Text>
-                                        </HStack>
-                                        <HStack justifyContent={'flex-end'} >
-                                            <Text>51 min</Text>
-                                        </HStack>
+
+                            <Pressable onPress={() => alert("I'm Pressed")}>
+
+                                <Box w={"100%"} bgColor={"white"} borderRadius={10}>
+                                    <Box>
+                                        <AspectRatio w="99%" ratio={4 / 3} >
+                                            <Image borderRadius={12} source={{ uri: "https://b.zmtcdn.com/data/pictures/4/18823714/ac86d415484fa57155bc1c0a3386dfee_o2_featured_v2.jpg?output-format=webp" }} alt="image" />
+                                        </AspectRatio>
+                                        <Center bg="blue.500" _text={{
+                                            color: "warmGray.50",
+                                            fontWeight: "400",
+                                            fontSize: "xs"
+                                        }} position="absolute" borderTopRightRadius={2} borderBottomRightRadius={2} bottom="2" px="1.5" py="0.3">
+                                            ₹125 OFF
+                                        </Center>
+                                    </Box>
+                                    <Stack p="4" space={3}>
+                                        <Stack space={2}>
+                                            <HStack justifyContent={'space-between'}>
+                                                <Heading fontWeight={'semibold'} size="md" >
+                                                    Kake Di Hatti
+                                                </Heading>
+                                                <Center bg="green.700" mt={1} borderRadius={6} pr={1} pl={1} _text={{ color: "white", fontWeight: "bold", fontSize: "xs" }} h={5} >
+                                                    <HStack>
+                                                        <Text color={"white"} fontWeight={'bold'}>3.9 </Text>
+                                                        <Icon as={<FontAwesome5 name="star" />} color={"white"} size={"10px"} mt={"5px"} />
+                                                    </HStack>
+                                                </Center>
+                                            </HStack>
+                                            <HStack justifyContent={'space-between'} >
+                                                <Text fontSize="sm" color={'gray.500'} fontWeight="normal" >
+                                                    North Indian , Mughlai
+                                                </Text>
+                                                <Text color={'gray.500'}>₹100 for one</Text>
+                                            </HStack>
+                                            <HStack justifyContent={'flex-end'} >
+                                                <Text>51 min</Text>
+                                            </HStack>
+                                        </Stack>
                                     </Stack>
-                                </Stack>
-                            </Box>
+                                </Box>
+
+                            </Pressable>
+
                         </VStack>
                     </HStack>
                 </Box>
