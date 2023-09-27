@@ -367,7 +367,7 @@ const Home = ({ props, navigation }) => {
                                             <VStack alignItems={'center'} space={1} key={item.id} >
                                                 <Pressable >
                                                     {({ pressed }) => (
-                                                        <Avatar {...pressed ? alert('Pressed!') : 'Press Me'} m={2} source={{ uri: String(item.img) }} width={["60px", "80px", "150px"]} height={["60px", "80px", "150px"]} />
+                                                        <Avatar {...pressed ? navigation.replace("Order") : 'Press Me'} m={2} source={{ uri: String(item.img) }} width={["60px", "80px", "150px"]} height={["60px", "80px", "150px"]} />
                                                     )}
                                                 </Pressable>
 
@@ -394,7 +394,7 @@ const Home = ({ props, navigation }) => {
                                         <VStack alignItems={'center'} space={3} key={item.id} >
                                             <Pressable >
                                                 {({ pressed }) => (
-                                                    <Avatar {...pressed ? alert('Pressed!') : 'Press Me'} size={"2xl"} source={{ uri: String(item.img) }} width={["60px", "80px", "150px"]} height={["60px", "80px", "150px"]} />
+                                                    <Avatar {...pressed ? navigation.replace("Order") : 'Press Me'} size={"2xl"} source={{ uri: String(item.img) }} width={["60px", "80px", "150px"]} height={["60px", "80px", "150px"]} />
                                                 )}
                                             </Pressable>
                                             <Text fontSize={["xs", "sm", "md"]} fontWeight={'normal'}  > {item.name} </Text>
@@ -423,12 +423,9 @@ const Home = ({ props, navigation }) => {
                     <HStack space={12} bgColor={'white'}>
                         <VStack width={"30%"} >
 
-                            <Pressable onPress={() => alert("I'm Pressed")}>
+                            <Pressable onPress={() => navigation.replace("Order") }>
 
                                 <Box w={"100%"} bgColor={"white"} borderRadius={10} >
-
-
-
                                     <Box borderRadius={2}>
                                         <AspectRatio w="99%" ratio={4 / 3}>
                                             <Image borderRadius={12} source={{ uri: "https://b.zmtcdn.com/data/pictures/chains/9/21429/d505be0b3ee11e4f79581b7b9df2d04a_o2_featured_v2.jpg?output-format=webp" }} alt="image" />
@@ -458,17 +455,15 @@ const Home = ({ props, navigation }) => {
                                             </HStack>
                                         </Stack>
                                     </Stack>
-
-
-
                                 </Box>
 
                             </Pressable>
+
                         </VStack>
 
                         <VStack width={"30%"}  >
 
-                            <Pressable onPress={() => alert("I'm Pressed")}>
+                            <Pressable onPress={() => navigation.replace("Order") }>
 
                                 <Box w={"100%"} bgColor={"white"} borderRadius={10}>
                                     <Box borderRadius={2}>
@@ -515,7 +510,7 @@ const Home = ({ props, navigation }) => {
 
                         <VStack width={"30%"}  >
 
-                            <Pressable onPress={() => alert("I'm Pressed")}>
+                            <Pressable onPress={() => navigation.replace("Order") }>
 
                                 <Box w={"100%"} bgColor={"white"} borderRadius={10}>
                                     <Box >
@@ -557,7 +552,7 @@ const Home = ({ props, navigation }) => {
                     <HStack space={12} bgColor={'white'}>
                         <VStack width={"30%"}  >
 
-                            <Pressable onPress={() => alert("I'm Pressed")}>
+                            <Pressable onPress={() => navigation.replace("Order")}>
 
                                 <Box w={"100%"} bgColor={"white"} borderRadius={10}>
                                     <Box borderRadius={2}>
@@ -604,7 +599,7 @@ const Home = ({ props, navigation }) => {
 
                         <VStack width={"30%"}  >
 
-                            <Pressable onPress={() => alert("I'm Pressed")}>
+                            <Pressable onPress={() => navigation.replace("Order")}>
 
                                 <Box w={"100%"} bgColor={"white"} borderRadius={10}>
                                     <Box borderRadius={2}>
@@ -644,7 +639,7 @@ const Home = ({ props, navigation }) => {
 
                         <VStack width={"30%"}  >
 
-                            <Pressable onPress={() => alert("I'm Pressed")}>
+                            <Pressable onPress={() => navigation.replace("Order")}>
 
                                 <Box w={"100%"} bgColor={"white"} borderRadius={10}>
                                     <Box>
