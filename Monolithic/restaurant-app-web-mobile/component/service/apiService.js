@@ -99,6 +99,30 @@ class ApiService
         return items;
     }
 
+    ///////////////////////////////////////
+
+    wallets()
+    {
+        const items = [
+            {   id : "wallet1" ,  name : "Paytm",       img : "Paytm Logo"},
+            {   id : "wallet2" ,  name : "Amazon Pay",  img : "Amazon Pay Logo"},
+            {   id : "wallet3" ,  name : "PhonePe",     img : "PhonePe Logo"},
+        ];
+        return items;
+    }
+
+    banks()
+    {
+        const items = [
+            {   id : "bank1" ,  name : "Axis Bank",         img : "Axis bank logo"},
+            {   id : "bank2" ,  name : "Bank Of Baroda",    img : "baroda bank logo"},
+            {   id : "bank3" ,  name : "Canada Bank",       img : "Canada Bank logo"},
+            {   id : "bank4" ,  name : "DBS Bank",          img : "Dbs bank logo"},
+            {   id : "bank5" ,  name : "Eastern Bank",      img : "Eastern bank logo"},            
+        ];
+        return items;
+    }
+
 
 }
 

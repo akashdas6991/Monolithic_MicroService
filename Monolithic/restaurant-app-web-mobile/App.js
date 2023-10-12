@@ -7,6 +7,8 @@ import SignUpNew from './component/SignUpNew';
 import ForgetPassword from './component/ForgetPassword';
 import ConfirmPassword from './component/ConfirmPassword';
 import Order from './component/Order';
+import Checkout from './component/Checkout';
+import Payment from './component/Payment';
 
 const Stack = createNativeStackNavigator();
 
@@ -16,10 +18,14 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown : false}}>  
           
+      <Stack.Screen name="Payment"   component={Payment}     />
+      <Stack.Screen name="Home"      component={Home}      />
+      <Stack.Screen name="SignInNew" component={SignInNew} />
           
-          <Stack.Screen name="Home"      component={Home}      />
+          <Stack.Screen name="Checkout"  component={Checkout}     />
+          
           <Stack.Screen name="Order"     component={Order}     />
-          <Stack.Screen name="SignInNew" component={SignInNew} />
+          
           <Stack.Screen name="SignUpNew" component={SignUpNew} />
           <Stack.Screen name="ForgetPassword"  component={ForgetPassword}  />
           <Stack.Screen name="ConfirmPassword" component={ConfirmPassword} />
