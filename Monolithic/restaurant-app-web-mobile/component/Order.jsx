@@ -3,10 +3,8 @@ import { Box, Heading, Text, NativeBaseProvider, VStack, HStack, Image,  Divider
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BackHandler, Platform, Alert as ReactAlert } from 'react-native';
 import { AntDesign, FontAwesome5, Ionicons } from '@expo/vector-icons';
-import Header from './Header';
-import GenerateTabWithContentForWebOrder from './GenerateTabWithContentForWebOrder';
-
-
+import WebHeader from './web/WebHeader';
+import WebOrder from './web/WebOrder';
 
 const Order = ({ props, navigation }) => {
 
@@ -80,7 +78,7 @@ const Order = ({ props, navigation }) => {
     <NativeBaseProvider>
       <Box safeArea w={"100%"} bgColor={'white'} >
 
-        <Header usernamee={"Akash"} />
+        <WebHeader usernamee={"Akash"} />
 
         <Divider w="100%" color={'gray.500'} />
 
@@ -253,7 +251,7 @@ const Order = ({ props, navigation }) => {
 
         <VStack w={"82%"} alignSelf={'center'} >
            
-          <GenerateTabWithContentForWebOrder />
+          <WebOrder />
         
         </VStack>
 

@@ -3,7 +3,7 @@ import { AspectRatio, Avatar, ChevronDownIcon, Divider, HStack, Icon, Image, Inp
 import React from 'react';
 import { Dimensions } from 'react-native';
 
-const Header = (props) => {
+const WebHeader = (props) => {
 
     const windowWidth = Dimensions.get('window').width;
 
@@ -123,4 +123,4 @@ const Header = (props) => {
     )
 }
 
-export default Header
+export default WebHeader

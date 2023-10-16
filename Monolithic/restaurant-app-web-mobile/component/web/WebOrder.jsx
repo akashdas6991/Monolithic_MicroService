@@ -8,7 +8,7 @@ import { Animated } from 'react-native-web';
 
 import { useNavigation } from '@react-navigation/native';
 
-const GenerateTabWithContentForWebOrder = () => {
+const WebOrder = () => {
 
     const navigation = useNavigation();
 
@@ -330,8 +330,8 @@ const GenerateTabWithContentForWebOrder = () => {
     }
 
     return (
-        <GenerateTabWithContentForWebOrder/>
+        <WebOrder/>
     )
 }
 
-export default GenerateTabWithContentForWebOrder
+export default WebOrder

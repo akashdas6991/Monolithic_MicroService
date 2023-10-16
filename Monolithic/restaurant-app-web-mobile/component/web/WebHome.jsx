@@ -2,13 +2,13 @@ import { Box, Heading, Text, Center, VStack, HStack, Avatar, AspectRatio, Image,
 import { AntDesign, FontAwesome5 } from '@expo/vector-icons';
 import { SceneMap, TabView } from 'react-native-tab-view';
 import { Pressable , Dimensions } from 'react-native';
-import apiService from './service/apiService';
+import apiService from '../service/apiService';
 import { Animated } from 'react-native-web';
 import React from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 
-const GenerateTabWithContentForWebHome = () => {
+const WebHome = () => {
 
     const navigation = useNavigation();
     const firstMenuItems = apiService.firstMenuItems();
@@ -434,4 +434,4 @@ const GenerateTabWithContentForWebHome = () => {
     )
 }
 
-export default GenerateTabWithContentForWebHome
+export default WebHome
