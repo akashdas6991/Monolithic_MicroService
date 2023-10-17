@@ -28,11 +28,11 @@ const Payment = ({ navigation }) => {
                     {/* Payment Process Modal Start */}
 
                     <Modal isOpen={paymentProcessModal} onClose={() => setPaymentProcessModal(false)} size="lg">
-                        <Modal.Content w="320px" h="320px">
+                        <Modal.Content w="2xs" >
                             <Modal.Body>
-                                <VStack space={3} alignItems="center" p={5}>
-                                    <Spinner size="xl" width="150px" color="red.400" />
-                                    <Text fontSize="md" m={2}>Completing your payment ...</Text>
+                                <VStack space={3} alignItems="center">
+                                    <Spinner size="xl" color="red.400" />
+                                    <Text fontSize="md" m={2}>Verifying UPI / Linking Wallet</Text>
                                 </VStack>
                             </Modal.Body>
                         </Modal.Content>
@@ -43,10 +43,10 @@ const Payment = ({ navigation }) => {
                     {/* Payment Success Modal Start */}
 
                     <Modal isOpen={paymentSuccessModal} onClose={() => setPaymentSuccessModal(false)} size="lg">
-                        <Modal.Content w="320px" h="320px">
+                        <Modal.Content w="2xs" >
                             <Modal.Body>
-                                <VStack space={3} alignItems="center" p={5}>
-                                    <Icon as={<AntDesign name="checkcircleo" />} size={40} color="green.700" />
+                                <VStack space={3} alignItems="center">
+                                    <Icon as={<AntDesign name="checkcircleo" />} size="3xl" color="green.700" />
                                     <Text fontSize="md" m={2}>Ordered Successfully.</Text>
                                 </VStack>
                             </Modal.Body>
@@ -58,10 +58,10 @@ const Payment = ({ navigation }) => {
                     {/* Payment Failed Modal Start */}
 
                     <Modal isOpen={paymentFailedModal} onClose={() => setPaymentFailedModal(false)} size="lg">
-                        <Modal.Content w="320px" h="320px">
+                        <Modal.Content w="2xs" >
                             <Modal.Body>
                                 <VStack space={3} alignItems="center" p={5}>
-                                    <Icon as={<AntDesign name="closecircleo" />} size={40} color="red.700" />
+                                    <Icon as={<AntDesign name="closecircleo" />} size="3xl" color="red.700" />
                                     <Text fontSize="md" m={2}>Order Failed.</Text>
                                 </VStack>
                             </Modal.Body>
@@ -211,8 +211,7 @@ const Payment = ({ navigation }) => {
                                       setMobikwikBlock('none') ;
                                     }   
                                     else
-                                      setUpiBlock('none')
-                
+                                      setUpiBlock('none');                
                                 } }>
                                 <HStack m={'3'}>
                                     <HStack w={"90%"} space={5} alignItems={'center'} >
@@ -236,7 +235,18 @@ const Payment = ({ navigation }) => {
                             <VStack p={'3'} display={upiBlock} >
                               <Input placeholder="Enter your UPI ID" borderRadius={'10'}/>
                               <Text fontSize={'2xs'} mt={'2'} mb={"2"} color={'gray.400'}>Your UPI ID will be encrypted and is 100% safe with us</Text>
-                              <Button bgColor={'red.400'} borderRadius={'7'}> Safe UPI ID </Button>
+                              <Button bgColor={'red.400'} borderRadius={'7'}
+                                  onPress={() => {
+                                        setPaymentProcessModal(true);
+                                        setTimeout(() => {
+                                            setPaymentProcessModal(false);
+                                        }, 1500);                                                                
+                                        setTimeout(() => {
+                                            navigation.replace("Checkout");
+                                        }, 3000);
+                                    }}> 
+                                  Safe UPI ID 
+                              </Button>
                             </VStack>
                             
                         </VStack>
@@ -305,7 +315,19 @@ const Payment = ({ navigation }) => {
                                   <Text fontSize={'2xs'} mt={'2'} mb={"2"} color={'gray.400'}>
                                     If you dont have a Mobikwik wallet, it will be created.
                                   </Text>
-                                  <Button bgColor={'red.400'} borderRadius={'7'}> Link wallet </Button>
+                                  <Button bgColor={'red.400'} borderRadius={'7'} 
+                                      onPress={() => {
+                                        setPaymentProcessModal(true);
+                                        setTimeout(() => {
+                                            setPaymentProcessModal(false);
+                                        }, 1500);                                                    
+                
+                                        setTimeout(() => {
+                                            navigation.replace("Checkout");
+                                        }, 3000);
+                                    }}>
+                                      Link wallet 
+                                  </Button>
                             </VStack>
 
                             <Pressable onPress={() => navigation.replace('Checkout')}>
