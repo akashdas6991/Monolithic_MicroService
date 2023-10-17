@@ -93,7 +93,7 @@ const Payment = ({ navigation }) => {
                         <Text color={"gray.400"} mt={'4'} mb={'4'} alignSelf={'center'}>CARDS</Text>
 
                         <VStack space={'1'} bgColor={'white'} borderRadius={15} >
-                            <Pressable onPress={() => navigation.replace("Checkout")}>
+                            <Pressable onPress={() => navigation.navigate("Checkout" , { payment : 'icici'   } )}>
                                 <HStack m={'3'}>
                                     <HStack w={"90%"} space={5} alignItems={'center'} >
                                         <Box borderWidth={"1px"} borderColor={"gray.200"} borderRadius={5} p={1}>
@@ -162,7 +162,7 @@ const Payment = ({ navigation }) => {
                         <Text color={"gray.400"} mt={'4'} mb={'4'} alignSelf={'center'}>UPI</Text>
 
                         <VStack space={'1'} bgColor={'white'} borderRadius={15}>
-                            <Pressable onPress={() => navigation.replace("Checkout")}>
+                            <Pressable onPress={() => navigation.navigate("Checkout" , { payment : 'paytm upi'   } )}>
                                 <HStack m={'3'}>
                                     <HStack w={"90%"} space={5} alignItems={'center'} >
                                         <Box borderWidth={"1px"} borderColor={"gray.200"} borderRadius={5} p={1}>
@@ -182,7 +182,7 @@ const Payment = ({ navigation }) => {
                                 </HStack>
                             </Pressable>
 
-                            <Pressable onPress={() => navigation.replace("Checkout")}>
+                            <Pressable onPress={() => navigation.navigate("Checkout" , { payment : 'cred pay upi'   } )}>
                                 <HStack m={'3'}>
                                     <HStack w={"90%"} space={5} alignItems={'center'} >
                                         <Box borderWidth={"1px"} borderColor={"gray.200"} borderRadius={5} p={1}>
@@ -242,7 +242,7 @@ const Payment = ({ navigation }) => {
                                             setPaymentProcessModal(false);
                                         }, 1500);                                                                
                                         setTimeout(() => {
-                                            navigation.replace("Checkout");
+                                            navigation.navigate("Checkout" , { payment : 'new added upi'   } )
                                         }, 3000);
                                     }}> 
                                   Safe UPI ID 
@@ -254,7 +254,7 @@ const Payment = ({ navigation }) => {
                         <Text color={"gray.400"} mt={'4'} mb={'4'} alignSelf={'center'}>WALLET</Text>
 
                         <VStack space={'1'} bgColor={'white'} borderRadius={15} >
-                            <Pressable onPress={() => navigation.replace('Checkout')}>
+                            <Pressable onPress={() => navigation.navigate("Checkout" , { payment : 'paytm wallet'   } )}>
                                 <HStack m={'3'}>
                                     <HStack w={"90%"} space={5} alignItems={'center'} >
                                         <Box borderWidth={"1px"} borderColor={"gray.200"} borderRadius={5} p={1}>
@@ -323,14 +323,14 @@ const Payment = ({ navigation }) => {
                                         }, 1500);                                                    
                 
                                         setTimeout(() => {
-                                            navigation.replace("Checkout");
+                                            navigation.navigate("Checkout" , { payment : 'mobikwik wallet'   } );
                                         }, 3000);
                                     }}>
                                       Link wallet 
                                   </Button>
                             </VStack>
 
-                            <Pressable onPress={() => navigation.replace('Checkout')}>
+                            <Pressable onPress={() => navigation.navigate("Checkout" , { payment : 'amazon pay wallet'   } )}>
                                 <HStack m={'3'}>
                                     <HStack w={"90%"} space={5} alignItems={'center'} >
                                         <Box borderWidth={"1px"} borderColor={"gray.200"} borderRadius={5} p={1}>
@@ -360,7 +360,7 @@ const Payment = ({ navigation }) => {
                         <Text color={"gray.400"} mt={'4'} mb={'4'} alignSelf={'center'}>PAY LATER</Text>
 
                         <VStack space={'1'} bgColor={'white'} borderRadius={15} >
-                            <Pressable onPress={() => navigation.replace('Checkout')}>
+                            <Pressable onPress={() => navigation.navigate("Checkout" , { payment : 'simpl'   } )}>
                                 <HStack m={'3'}>
                                     <HStack w={"50%"} space={5} alignItems={'center'} >
                                         <Box borderWidth={"1px"} borderColor={"gray.200"} borderRadius={5} p={1}>
@@ -383,7 +383,7 @@ const Payment = ({ navigation }) => {
                                 </HStack>
                             </Pressable>
 
-                            <Pressable onPress={() => navigation.replace('Checkout')}>
+                            <Pressable onPress={() => navigation.navigate("Checkout" , { payment : 'lazypay'   } )}}>
                                 <HStack m={'3'}>
                                     <HStack w={"90%"} space={5} alignItems={'center'} >
                                         <Box borderWidth={"1px"} borderColor={"gray.200"} borderRadius={5} p={1}>
@@ -403,7 +403,7 @@ const Payment = ({ navigation }) => {
                                 </HStack>
                             </Pressable>
 
-                            <Pressable onPress={() => navigation.replace('Checkout')}>
+                            <Pressable onPress={() => navigation.navigate("Checkout" , { payment : 'patym postpaid'   } )}>
                                 <HStack m={'3'}>
                                     <HStack w={"90%"} space={5} alignItems={'center'} >
                                         <Box borderWidth={"1px"} borderColor={"gray.200"} borderRadius={5} p={1}>
@@ -449,7 +449,7 @@ const Payment = ({ navigation }) => {
                         <Text color={"gray.400"} mt={'4'} mb={'4'} alignSelf={'center'}>CASH ON DELIVERY</Text>
 
                         <VStack space={'1'} bgColor={'white'} borderRadius={15}>
-                            <Pressable onPress={() => navigation.replace('Checkout')}>
+                            <Pressable onPress={() => navigation.navigate("Checkout" , { payment : 'cash on delivery'   } )}>
                                 <HStack m={'3'}>
                                     <HStack w={"90%"} space={5} alignItems={'center'} >
                                         <Box borderWidth={"1px"} borderColor={"gray.200"} borderRadius={5} p={1}>
