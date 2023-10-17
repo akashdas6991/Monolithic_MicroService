@@ -20,6 +20,7 @@ const Payment = ({ navigation }) => {
     const [paymentFailedModal, setPaymentFailedModal] = useState(false);
 
     const [upiBlock, setUpiBlock] = useState('none');
+    const [mobikwikBlock, setMobikwikBlock] = useState('none');
 
     const Modals = () => {
 
@@ -201,7 +202,18 @@ const Payment = ({ navigation }) => {
                                 </HStack>
                             </Pressable>
 
-                            <Pressable onPress={() => upiBlock === 'none' ? setUpiBlock('flex') : setUpiBlock('none') }>
+                            <Pressable
+                                onPress={() => {
+                
+                                    if(upiBlock === 'none') 
+                                    {
+                                      setUpiBlock('flex') ; 
+                                      setMobikwikBlock('none') ;
+                                    }   
+                                    else
+                                      setUpiBlock('none')
+                
+                                } }>
                                 <HStack m={'3'}>
                                     <HStack w={"90%"} space={5} alignItems={'center'} >
                                         <Box borderWidth={"1px"} borderColor={"gray.200"} borderRadius={5} p={1}>
@@ -232,7 +244,7 @@ const Payment = ({ navigation }) => {
                         <Text color={"gray.400"} mt={'4'} mb={'4'} alignSelf={'center'}>WALLET</Text>
 
                         <VStack space={'1'} bgColor={'white'} borderRadius={15} >
-                            <Pressable onPress={() => alert("open text field / continue button / redirect to checkout")}>
+                            <Pressable onPress={() => navigation.replace('Checkout')}>
                                 <HStack m={'3'}>
                                     <HStack w={"90%"} space={5} alignItems={'center'} >
                                         <Box borderWidth={"1px"} borderColor={"gray.200"} borderRadius={5} p={1}>
@@ -255,7 +267,17 @@ const Payment = ({ navigation }) => {
                                 </HStack>
                             </Pressable>
 
-                            <Pressable onPress={() => alert("open text field / verify button / redirect to checkout")}>
+                            <Pressable
+                                onPress={() => {
+                
+                                    if(mobikwikBlock === 'none') 
+                                    {
+                                      setMobikwikBlock('flex') ; 
+                                      setUpiBlock('none') ;
+                                    }   
+                                    else
+                                      setMobikwikBlock('none');
+                                } }>
                                 <HStack m={'3'}>
                                     <HStack w={"90%"} space={5} alignItems={'center'} >
                                         <Box borderWidth={"1px"} borderColor={"gray.200"} borderRadius={5} p={1}>
@@ -278,7 +300,15 @@ const Payment = ({ navigation }) => {
                                 </HStack>
                             </Pressable>
 
-                            <Pressable onPress={() => alert("open text field / verify button / redirect to checkout")}>
+                            <VStack p={'3'} display={mobikwikBlock} >
+                                  <Input placeholder="Enter your mobile number" borderRadius={'10'}/>
+                                  <Text fontSize={'2xs'} mt={'2'} mb={"2"} color={'gray.400'}>
+                                    If you dont have a Mobikwik wallet, it will be created.
+                                  </Text>
+                                  <Button bgColor={'red.400'} borderRadius={'7'}> Link wallet </Button>
+                            </VStack>
+
+                            <Pressable onPress={() => navigation.replace('Checkout')}>
                                 <HStack m={'3'}>
                                     <HStack w={"90%"} space={5} alignItems={'center'} >
                                         <Box borderWidth={"1px"} borderColor={"gray.200"} borderRadius={5} p={1}>
@@ -290,8 +320,11 @@ const Payment = ({ navigation }) => {
                                             <Text fontSize={'md'} fontWeight={'bold'}>
                                                 Amazon Pay
                                             </Text>
-                                            <Text fontSize={'xs'} fontWeight={'normal'} color={'gray.500'}>
-                                                Link your Amazon Pay wallet
+                                            <Text
+                                                fontSize={'xs'}
+                                                fontWeight={'normal'}
+                                                color={'gray.500'}>
+                                                Balance: ₹60.00
                                             </Text>
                                         </VStack>
                                     </HStack>
@@ -305,7 +338,7 @@ const Payment = ({ navigation }) => {
                         <Text color={"gray.400"} mt={'4'} mb={'4'} alignSelf={'center'}>PAY LATER</Text>
 
                         <VStack space={'1'} bgColor={'white'} borderRadius={15} >
-                            <Pressable onPress={() => alert("open text field / continue button / redirect to checkout")}>
+                            <Pressable onPress={() => navigation.replace('Checkout')}>
                                 <HStack m={'3'}>
                                     <HStack w={"50%"} space={5} alignItems={'center'} >
                                         <Box borderWidth={"1px"} borderColor={"gray.200"} borderRadius={5} p={1}>
@@ -328,7 +361,7 @@ const Payment = ({ navigation }) => {
                                 </HStack>
                             </Pressable>
 
-                            <Pressable onPress={() => alert("open text field / verify button / redirect to checkout")}>
+                            <Pressable onPress={() => navigation.replace('Checkout')}>
                                 <HStack m={'3'}>
                                     <HStack w={"90%"} space={5} alignItems={'center'} >
                                         <Box borderWidth={"1px"} borderColor={"gray.200"} borderRadius={5} p={1}>
@@ -348,7 +381,7 @@ const Payment = ({ navigation }) => {
                                 </HStack>
                             </Pressable>
 
-                            <Pressable onPress={() => alert("open text field / verify button / redirect to checkout")}>
+                            <Pressable onPress={() => navigation.replace('Checkout')}>
                                 <HStack m={'3'}>
                                     <HStack w={"90%"} space={5} alignItems={'center'} >
                                         <Box borderWidth={"1px"} borderColor={"gray.200"} borderRadius={5} p={1}>
@@ -394,7 +427,7 @@ const Payment = ({ navigation }) => {
                         <Text color={"gray.400"} mt={'4'} mb={'4'} alignSelf={'center'}>CASH ON DELIVERY</Text>
 
                         <VStack space={'1'} bgColor={'white'} borderRadius={15}>
-                            <Pressable onPress={() => { setPaymentSuccessModal(true) }}>
+                            <Pressable onPress={() => navigation.replace('Checkout')}>
                                 <HStack m={'3'}>
                                     <HStack w={"90%"} space={5} alignItems={'center'} >
                                         <Box borderWidth={"1px"} borderColor={"gray.200"} borderRadius={5} p={1}>
