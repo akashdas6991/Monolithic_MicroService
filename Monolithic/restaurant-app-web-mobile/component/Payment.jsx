@@ -47,7 +47,7 @@ const Payment = ({ navigation }) => {
                             <Modal.Body>
                                 <VStack space={3} alignItems="center">
                                     <Icon as={<AntDesign name="checkcircleo" />} size="3xl" color="green.700" />
-                                    <Text fontSize="md" m={2}>Ordered Successfully.</Text>
+                                    <Text fontSize="md" m={2}>Verifying UPI / Linking Wallet Successfully.</Text>
                                 </VStack>
                             </Modal.Body>
                         </Modal.Content>
@@ -62,7 +62,7 @@ const Payment = ({ navigation }) => {
                             <Modal.Body>
                                 <VStack space={3} alignItems="center" p={5}>
                                     <Icon as={<AntDesign name="closecircleo" />} size="3xl" color="red.700" />
-                                    <Text fontSize="md" m={2}>Order Failed.</Text>
+                                    <Text fontSize="md" m={2}>Verifying UPI / Linking Wallet Failed.</Text>
                                 </VStack>
                             </Modal.Body>
                         </Modal.Content>
@@ -240,10 +240,13 @@ const Payment = ({ navigation }) => {
                                         setPaymentProcessModal(true);
                                         setTimeout(() => {
                                             setPaymentProcessModal(false);
-                                        }, 1500);                                                                
+                                        }, 1500);  
+                                        setTimeout(() => {
+                                            setPaymentSuccessModal(true);
+                                        }, 1500);
                                         setTimeout(() => {
                                             navigation.navigate("Checkout" , { payment : 'new added upi'   } )
-                                        }, 3000);
+                                        }, 5000);
                                     }}> 
                                   Safe UPI ID 
                               </Button>
@@ -321,10 +324,12 @@ const Payment = ({ navigation }) => {
                                         setTimeout(() => {
                                             setPaymentProcessModal(false);
                                         }, 1500);                                                    
-                
+                                        setTimeout(() => {
+                                            setPaymentSuccessModal(true);
+                                        }, 1500);
                                         setTimeout(() => {
                                             navigation.navigate("Checkout" , { payment : 'mobikwik wallet'   } );
-                                        }, 3000);
+                                        }, 5000);
                                     }}>
                                       Link wallet 
                                   </Button>
