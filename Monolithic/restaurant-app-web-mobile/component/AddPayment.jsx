@@ -183,7 +183,7 @@ const AddPayment = ({ route, navigation }) => {
                         <Modal.Body>
                             <VStack space={3} alignItems="center">
                                 <Spinner size="xl" color="red.400" />
-                                <Text fontSize="md" m={2}>Completing your payment ...</Text>
+                                <Text fontSize="md" m={2}>Adding your card ...</Text>
                             </VStack>
                         </Modal.Body>
                     </Modal.Content>
@@ -198,7 +198,7 @@ const AddPayment = ({ route, navigation }) => {
                         <Modal.Body>
                             <VStack space={3} alignItems="center">
                                 <Icon as={<AntDesign name="checkcircleo" />} size="3xl" color="green.700" />
-                                <Text fontSize="md" m={2}>Ordered Successfully.</Text>
+                                <Text fontSize="md" m={2}>Card added Successfully.</Text>
                             </VStack>
                         </Modal.Body>
                     </Modal.Content>
@@ -213,7 +213,7 @@ const AddPayment = ({ route, navigation }) => {
                         <Modal.Body>
                             <VStack space={3} alignItems="center" p={5}>
                                 <Icon as={<AntDesign name="closecircleo" />} size={40} color="red.700" />
-                                <Text fontSize="md" m={2}>Order Failed.</Text>
+                                <Text fontSize="md" m={2}>Card Failed to Add.</Text>
                             </VStack>
                         </Modal.Body>
                     </Modal.Content>
