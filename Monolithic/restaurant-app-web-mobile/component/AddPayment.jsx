@@ -68,7 +68,7 @@ const AddPayment = ({ route, navigation }) => {
                         <Divider mt={'48'}/>
             
 
-                        <Button safeAreaBottom w="95%" alignSelf="center" bgColor="red.400" _hover={{ bgColor: "red.300" }}
+                        <Button w="95%" alignSelf="center" bgColor="red.400" _hover={{ bgColor: "red.300" }}
                                 onPress={() =>  {    
 
                                                 }}>
