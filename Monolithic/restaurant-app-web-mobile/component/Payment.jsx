@@ -19,6 +19,8 @@ const Payment = ({ navigation }) => {
     const [paymentSuccessModal, setPaymentSuccessModal] = useState(false);
     const [paymentFailedModal, setPaymentFailedModal] = useState(false);
 
+    const [upiBlock, setUpiBlock] = useState('none');
+
     const Modals = () => {
 
         return  <Center>            
@@ -199,7 +201,7 @@ const Payment = ({ navigation }) => {
                                 </HStack>
                             </Pressable>
 
-                            <Pressable onPress={() => navigation.navigate("AddPayment" , { payment : 'upi'   } )}>
+                            <Pressable onPress={() => upiBlock === 'none' ? setUpiBlock('flex') : setUpiBlock('none') }>
                                 <HStack m={'3'}>
                                     <HStack w={"90%"} space={5} alignItems={'center'} >
                                         <Box borderWidth={"1px"} borderColor={"gray.200"} borderRadius={5} p={1}>
@@ -218,6 +220,13 @@ const Payment = ({ navigation }) => {
                                     </VStack>
                                 </HStack>
                             </Pressable>
+
+                            <VStack p={'3'} display={upiBlock} >
+                              <Input placeholder="Enter your UPI ID" borderRadius={'10'}/>
+                              <Text fontSize={'2xs'} mt={'2'} mb={"2"} color={'gray.400'}>Your UPI ID will be encrypted and is 100% safe with us</Text>
+                              <Button bgColor={'red.400'} borderRadius={'7'}> Safe UPI ID </Button>
+                            </VStack>
+                            
                         </VStack>
 
                         <Text color={"gray.400"} mt={'4'} mb={'4'} alignSelf={'center'}>WALLET</Text>
