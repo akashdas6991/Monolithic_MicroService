@@ -260,14 +260,14 @@ const Checkout = ({ navigation }) => {
 
                         <Text color={"gray.400"} mt={'4'} mb={'4'} alignSelf={'center'} fontSize={'xs'} fontWeight={'semibold'}>B I L L  S U M M A R Y</Text>
 
-                        <VStack space={'1'} bgColor={'white'} borderRadius={15} >
+                        <VStack space={'3'} p={'3'} bgColor={'white'} borderRadius={15} >
 
-                            <HStack m={'3'} mb={'0'} justifyContent={'space-between'}>
+                            <HStack justifyContent={'space-between'}>
                                 <Text fontSize={'sm'} fontWeight={'bold'}>Subtotal</Text>
                                 <Text fontSize={'sm'} fontWeight={'bold'}>₹398</Text>
                             </HStack>
 
-                            <HStack m={'3'}>
+                            <HStack >
                                 <HStack w={"90%"} space={2} alignItems={'center'} >
                                     <Icon as={<AntDesign name="form" />} size={'xs'} />
                                     <Text fontSize={'xs'} fontWeight={'semibold'}>
@@ -279,7 +279,7 @@ const Checkout = ({ navigation }) => {
                                 </HStack>
                             </HStack>
 
-                            <HStack m={'3'}>
+                            <HStack>
                                 <HStack w={"90%"} space={2} alignItems={'center'} >
                                     <Icon as={<AntDesign name="form" />} size={'xs'} />
                                     <Text fontSize={'xs'} fontWeight={'semibold'}>
@@ -291,7 +291,7 @@ const Checkout = ({ navigation }) => {
                                 </HStack>
                             </HStack>
 
-                            <HStack m={'3'}>
+                            <HStack >
                                 <HStack w={"90%"} space={2} alignItems={'center'} >
                                     <Icon as={<AntDesign name="form" />} size={'xs'} />
                                     <Text fontSize={'xs'} fontWeight={'semibold'}>
@@ -305,7 +305,7 @@ const Checkout = ({ navigation }) => {
 
                             <Divider />
 
-                            <HStack m={'3'} justifyContent={'space-between'}>
+                            <HStack justifyContent={'space-between'}>
                                 <Text fontSize={'xs'} fontWeight={'bold'}>Grand Total</Text>
                                 <Text fontSize={'xs'} fontWeight={'bold'}>₹472.26</Text>
                             </HStack>
@@ -325,16 +325,16 @@ const Checkout = ({ navigation }) => {
                             </Text>
 
                             <HStack space={'2'} m={'2'}>
-                                <Button startIcon={<Icon as={Ionicons} name="cloud-download-outline" size='2xs' />} borderRadius={'10'} p={'4'} h={'0'}>
+                                <Button startIcon={<Icon as={Ionicons} name="cloud-download-outline" size='2xs' />} borderRadius={'10'} >
                                     <Text fontSize={'xs'} fontWeight={'bold'}>₹15</Text>
                                 </Button>
-                                <Button startIcon={<Icon as={Ionicons} name="cloud-download-outline" size='2xs' />} borderRadius={'10'} p={'4'} h={'0'}>
+                                <Button startIcon={<Icon as={Ionicons} name="cloud-download-outline" size='2xs' />} borderRadius={'10'} >
                                     <Text fontSize={'xs'} fontWeight={'bold'}>₹20</Text>
                                 </Button>
-                                <Button startIcon={<Icon as={Ionicons} name="cloud-download-outline" size='2xs' />} borderRadius={'10'} p={'4'} h={'0'}>
+                                <Button startIcon={<Icon as={Ionicons} name="cloud-download-outline" size='2xs' />} borderRadius={'10'} >
                                     <Text fontSize={'xs'} fontWeight={'bold'}>₹30</Text>
                                 </Button>
-                                <Button startIcon={<Icon as={Ionicons} name="cloud-download-outline" size='2xs' />} borderRadius={'10'} p={'4'} h={'0'}>
+                                <Button startIcon={<Icon as={Ionicons} name="cloud-download-outline" size='2xs' />} borderRadius={'10'} >
                                     <Text fontSize={'xs'} fontWeight={'bold'}>Other</Text>
                                 </Button>
                             </HStack>
