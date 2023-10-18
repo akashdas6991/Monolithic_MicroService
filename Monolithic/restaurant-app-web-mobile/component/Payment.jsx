@@ -10,9 +10,6 @@ import { Screen, ScreenContainer } from 'react-native-screens';
 import { Dimensions } from 'react-native';
 import ApiService from './service/apiService';
 
-
-
-
 const Payment = ({ navigation }) => {
     
     const [paymentProcessModal, setPaymentProcessModal] = useState(false);
@@ -45,12 +42,13 @@ const Payment = ({ navigation }) => {
                     <Modal isOpen={paymentSuccessModal} onClose={() => setPaymentSuccessModal(false)} size="lg">
                         <Modal.Content w="2xs" >
                             <Modal.Body>
-                                <VStack space={3} alignItems="center">
-                                    <Icon as={<AntDesign name="checkcircleo" />} size="3xl" color="green.700" />
-                                    <Text fontSize="md" m={2}>Verifying UPI / Linking Wallet Successfully.</Text>
+                                <VStack alignItems="center">
+                                    <Icon as={<AntDesign name="checkcircleo" />} size="3xl" m={"4"} color="green.700" />
+                                    <Text fontSize="md" alignSelf={'center'}>Verifying UPI / Linking Wallet</Text>
+                                    <Text fontSize="md" alignSelf={'center'}>Successfully.</Text>
                                 </VStack>
                             </Modal.Body>
-                        </Modal.Content>
+                        </Modal.Content>  
                     </Modal>
 
                     {/* Payment Success Modal End */}
@@ -60,9 +58,10 @@ const Payment = ({ navigation }) => {
                     <Modal isOpen={paymentFailedModal} onClose={() => setPaymentFailedModal(false)} size="lg">
                         <Modal.Content w="2xs" >
                             <Modal.Body>
-                                <VStack space={3} alignItems="center" p={5}>
-                                    <Icon as={<AntDesign name="closecircleo" />} size="3xl" color="red.700" />
-                                    <Text fontSize="md" m={2}>Verifying UPI / Linking Wallet Failed.</Text>
+                                <VStack alignItems="center">
+                                    <Icon as={<AntDesign name="closecircleo" />} size="3xl" m={"4"} color="red.700" />
+                                    <Text fontSize="md" alignSelf={'center'}>Verifying UPI / Linking Wallet</Text>
+                                    <Text fontSize="md" alignSelf={'center'}>Failed.</Text>
                                 </VStack>
                             </Modal.Body>
                         </Modal.Content>
@@ -356,7 +355,7 @@ const Payment = ({ navigation }) => {
                                         </VStack>
                                     </HStack>
                                     <VStack w={"10%"} alignSelf={'center'} alignItems={'flex-end'}>
-                                        <Text fontSize={'sm'} color={"red.500"}>Link</Text>
+                                        <AntDesign name="right" />
                                     </VStack>
                                 </HStack>
                             </Pressable>
@@ -388,7 +387,7 @@ const Payment = ({ navigation }) => {
                                 </HStack>
                             </Pressable>
 
-                            <Pressable onPress={() => navigation.navigate("Checkout" , { payment : 'lazypay'   } )}}>
+                            <Pressable onPress={() => navigation.navigate("Checkout" , { payment : 'lazypay'   } )}>
                                 <HStack m={'3'}>
                                     <HStack w={"90%"} space={5} alignItems={'center'} >
                                         <Box borderWidth={"1px"} borderColor={"gray.200"} borderRadius={5} p={1}>

@@ -99,6 +99,20 @@ class ApiService
         return items;
     }
 
+    thirdMenuItems()
+    {
+        const items = [
+            {   id : 1 ,  name : "KFC",             distance : "25 min",  img : "https://b.zmtcdn.com/data/brand_creatives/logos/560b209a689eefa9feb367b5d5604097_1611382952.png?output-format=webp"},
+            {   id : 2 ,  name : "Chowman",         distance : "32 min",  img : "https://b.zmtcdn.com/data/brand_creatives/logos/6799a847a4bfaee73f5e14aaba8cef83_1638193272.png?output-format=webp"},
+            {   id : 3 ,  name : "Burger King",     distance : "36 min",  img : "https://b.zmtcdn.com/data/brand_creatives/logos/6a11fd0f30c9fd9ceaff2f5b21f61d23_1617188103.png?output-format=webp"},
+            {   id : 4 ,  name : "Shangai",         distance : "51 min",  img : "https://b.zmtcdn.com/data/brand_creatives/logos/c71b0bfcb5ee0f5773e38722eab308bf_1647263570.png?output-format=webp"},
+            {   id : 5 ,  name : "Gupta Brothers",  distance : "21 min",  img : "https://b.zmtcdn.com/data/brand_creatives/logos/a2531dc570196c0cd9322814eb010d94_1605102324.png?output-format=webp"},
+            
+            
+        ];
+        return items;
+    }
+
     ///////////////////////////////////////
 
     wallets()

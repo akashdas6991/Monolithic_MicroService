@@ -1,463 +1,444 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Heading, Text, Center, NativeBaseProvider, Link, PresenceTransition, VStack, HStack, Alert, Avatar, AspectRatio, Image, Stack, Flex, Spacer, ScrollView, Divider, StatusBar, IconButton, Icon, Input, Button, ChevronDownIcon, Menu, HamburgerIcon, Popover, FormControl } from "native-base";
+import { Box, Heading, Text, Center, NativeBaseProvider, Link, PresenceTransition, VStack, HStack, Alert, Avatar, AspectRatio, Image, Stack, Flex, Spacer, ScrollView, Divider, StatusBar, IconButton, Icon, Input, Button, ChevronDownIcon, Menu, HamburgerIcon, Popover, Badge, Modal, Radio, Spinner, CloseIcon, CheckIcon, Checkbox } from "native-base";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import apiService from './service/apiService';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/native-stack';
 import { BackHandler, Platform, Pressable, Alert as ReactAlert } from 'react-native';
-import { AntDesign, EvilIcons, FontAwesome, FontAwesome5, Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { AntDesign, EvilIcons, FontAwesome, FontAwesome5, Fontisto, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { Screen, ScreenContainer } from 'react-native-screens';
 import { Dimensions } from 'react-native';
+import ApiService from './service/apiService';
 
+const Checkout = ({ navigation }) => {
 
+    const thirdMenuItems = ApiService.secondMenuItems();
 
-const Checkout = ({ props, navigation }) => {
+    const [paymentProcessModal, setPaymentProcessModal] = useState(false);
+    const [paymentSuccessModal, setPaymentSuccessModal] = useState(false);
+    const [paymentFailedModal, setPaymentFailedModal] = useState(false);
 
-    const [popUp, setPopUp] = useState([]);
-    const [token, setToken] = useState("");
-    const [errors, setErrors] = useState([]);
-    const [userNamee, setUserNamee] = useState("");
-    const [userEmail, setUserEmail] = useState("");
-    const [userMobile, setUserMobile] = useState("");
-    const [userPassword, setUserPassword] = useState("");
-    const [showPassword, setShowPassword] = useState(false);
+    const Modals = () => {
 
-    const firstMenuItems = apiService.firstMenuItems();
-    const secondMenuItems = apiService.secondMenuItems();
+        return <Center>
+            {/* Payment Process Modal Start */}
 
-    let count = 0;
+            <Modal isOpen={paymentProcessModal} onClose={() => setPaymentProcessModal(false)} size="lg">
+                <Modal.Content w="2xs" >
+                    <Modal.Body>
+                        <VStack space={3} alignItems="center">
+                            <Spinner size="xl" color="red.400" />
+                            <Text fontSize="md" m={2}>Verifying UPI / Linking Wallet</Text>
+                        </VStack>
+                    </Modal.Body>
+                </Modal.Content>
+            </Modal>
 
-    const windowWidth = Dimensions.get('window').width;
-    const windowHeight = Dimensions.get('window').height;
+            {/* Payment Process Modal End */}
 
-    const windowDimensions = Dimensions.get('window');
-    const screenDimensions = Dimensions.get('screen');
+            {/* Payment Success Modal Start */}
 
-    console.log(windowWidth + " aaaaaa " + windowHeight);
+            <Modal isOpen={paymentSuccessModal} onClose={() => setPaymentSuccessModal(false)} size="lg">
+                <Modal.Content w="2xs" >
+                    <Modal.Body>
+                        <VStack alignItems="center">
+                            <Icon as={<AntDesign name="checkcircleo" />} size="3xl" m={"4"} color="green.700" />
+                            <Text fontSize="md" alignSelf={'center'}>Verifying UPI / Linking Wallet</Text>
+                            <Text fontSize="md" alignSelf={'center'}>Successfully.</Text>
+                        </VStack>
+                    </Modal.Body>
+                </Modal.Content>
+            </Modal>
 
-    const [dimensions, setDimensions] = useState({
-        window: windowDimensions,
-        screen: screenDimensions,
-    });
+            {/* Payment Success Modal End */}
 
+            {/* Payment Failed Modal Start */}
 
+            <Modal isOpen={paymentFailedModal} onClose={() => setPaymentFailedModal(false)} size="lg">
+                <Modal.Content w="2xs" >
+                    <Modal.Body>
+                        <VStack alignItems="center">
+                            <Icon as={<AntDesign name="closecircleo" />} size="3xl" m={"4"} color="red.700" />
+                            <Text fontSize="md" alignSelf={'center'}>Verifying UPI / Linking Wallet</Text>
+                            <Text fontSize="md" alignSelf={'center'}>Failed.</Text>
+                        </VStack>
+                    </Modal.Body>
+                </Modal.Content>
+            </Modal>
 
+            {/* Payment Failed Modal End */}
 
-
-    // restrict back button for web - not working
-    // React.useEffect(
-    //     () =>
-    //       navigation.addListener('beforeRemove', (e) => {
-    //         // if (!hasUnsavedChanges) {
-    //         //   // If we don't have unsaved changes, then we don't need to do anything
-    //         //   return;
-    //         // }
-
-    //         // Prevent default behavior of leaving the screen
-    //         e.preventDefault();
-
-    //         // Prompt the user before leaving the screen
-    //         Alert.alert(
-    //           'Discard changes?',
-    //           'You have unsaved changes. Are you sure to discard them and leave the screen?',
-    //           [
-    //             { text: "Don't leave", style: 'cancel', onPress: () => {} },
-    //             {
-    //               text: 'Discard',
-    //               style: 'destructive',
-    //               // If the user confirmed, then we dispatch the action we blocked earlier
-    //               // This will continue the action that had triggered the removal of the screen
-    //               onPress: () => navigation.dispatch(e.data.action),
-    //             },
-    //           ]
-    //         );
-    //       }),
-    //     [navigation]
-    //   );
-
-    useEffect(() => {
-
-        const subscription = Dimensions.addEventListener(
-            'change',
-            ({ window, screen }) => {
-                setDimensions({ window, screen });
-
-                console.log(window, screen);
-            },
-        );
-        //return () => subscription?.remove();
-
-        //check user logged In
-        loggedIn();
-
-
-
-        //restrict back button of mobile - working
-        const backButtonAction = () => {
-            ReactAlert.alert('Hold on !', 'Are you sure you want to exit ?', [
-                {
-                    text: 'Cancel',
-                    onPress: () => null,
-                    style: 'cancel',
-                },
-                {
-                    text: 'Yes',
-                    onPress: () => BackHandler.exitApp()
-                },
-            ]);
-            return true;
-        };
-
-        const backHandler = BackHandler.addEventListener(
-            'hardwareBackPress',
-            backButtonAction,
-        );
-
-        return () => {
-            backHandler.remove();
-        }
-
-    }, []);
-
-    //     React.useEffect(() => {
-    //         const unsubscribe = navigation.addListener('focusout', () => {
-    //           alert('Screen is focused');
-    //           // The screen is focused
-    //           // Call any action
-    //                     // Prompt the user before leaving the screen
-    //             // alert(
-    //             //   'Discard changes?',
-    //             //   'You have unsaved changes. Are you sure to discard them and leave the screen?',
-    //             //   [
-    //             //     { text: "Don't leave", style: 'cancel', onPress: () => {} },
-    //             //     {
-    //             //       text: 'Discard',
-    //             //       style: 'destructive',
-    //             //       // If the user confirmed, then we dispatch the action we blocked earlier
-    //             //       // This will continue the action that had triggered the removal of the screen
-    //             //       onPress: () => navigation.dispatch(e.data.action),
-    //             //     },
-    //             //   ]
-    //             // );
-
-    //             let text = "Press a button!\nEither OK or Cancel.";
-    //   if (confirm(text) == true) {
-    //     text = "You pressed OK!";
-    //   } else {
-    //     text = "You canceled!";
-    //   }
-
-    //         });
-
-    //         // Return the function to unsubscribe from the event so it gets removed on unmount
-    //         return unsubscribe;
-    //     }, []);
-
-    //check logged In
-    const loggedIn = () => {
-        try {
-            AsyncStorage.getAllKeys((err, keys) => {
-                AsyncStorage.multiGet(keys, (err, stores) => {
-                    stores.map((result, i, store) => {
-                        // get at each store's key/value so you can work with it
-                        let key = store[i][0];
-                        let value = store[i][1];
-
-                        if (key == "token")
-                            setToken(value);
-
-                        if (key == "userEmail")
-                            setUserEmail(value);
-
-                        //if(key == "loggedIn")
-                        //  navigation.replace("Home");
-                    });
-                });
-            });
-        }
-        catch (e) {
-            console.log(e);
-        }
+        </Center>;
     };
-
-    //submit form
-    const handleSignUp = () => {
-
-        let requestBody = {};
-        requestBody.userNamee = userNamee;
-        requestBody.userEmail = userEmail;
-        requestBody.userMobile = userMobile;
-        requestBody.userPassword = userPassword;
-
-        if (validate()) {
-            ApiService.signUp(requestBody)
-                .then(response => response.json())
-                .then((response) => {
-                    if (response.httpStatus == "CREATED") {
-                        setPopUp([{
-                            icon: "success",
-                            color: "success.600",
-                            message: response.message
-                        }]);
-
-                        setTimeout(() => {
-                            navigation.replace("SignInNew");
-                        }, 1100);
-                    }
-                    else {
-                        setPopUp([{
-                            icon: "error",
-                            color: "error.600",
-                            message: response.message
-                        }]);
-                    }
-                }).catch(function (error) {
-                    setPopUp([{
-                        icon: "error",
-                        color: "error.600",
-                        message: error.message
-                    }]);
-                });
-        }
-    }
-
-    const handleSignOut = () => {
-
-        let tokenData = token;
-        let requestBody = {};
-        requestBody.userEmail = userEmail;
-
-        apiService.signOut(requestBody, tokenData)
-            .then(response => response.json())
-            .then((response) => {
-                if (response.httpStatus == "OK") {
-                    let keys = ['token', 'userEmail', 'loggedIn'];
-                    AsyncStorage.multiRemove(keys, err => { });
-
-                    setPopUp([{
-                        icon: "success",
-                        message: response.message
-                    }]);
-
-                    setTimeout(() => {
-                        navigation.replace("SignInNew");
-                    }, 1100);
-                }
-                else {
-                    setPopUp([{
-                        icon: "error",
-                        message: response.message
-                    }]);
-                }
-            }).catch(function (error) {
-                console.log('There has been a problem with your fetch operation: ' + error.message);
-            });
-    }
 
     return (
         <NativeBaseProvider>
-            <Box safeArea w={"100%"} bgColor={'white'} >
+            <Box safeArea w={"100%"} bgColor={'gray.100'}>
 
-                <HStack w={"82%"} bg={"white"} pt={"15px"} pb={"20px"} justifyContent={'space-between'} alignSelf={'center'}>
-                    <HStack w={"14%"} >
-                        <Text color={"green.600"} fontSize={"3xl"} fontWeight={"extrabold"}>
-                            Checkout
-                        </Text>
+                <Modals />
+
+                <Box alignSelf={'center'} w={'sm'} >
+
+                    <HStack space={'2'} mt={'4'} mb={'4'} alignItems={'center'}>
+                        <Pressable onPress={() => navigation.replace("Checkout")}>
+                            <Icon as={<AntDesign name="left" />} size={'sm'} color={'black'} />
+                        </Pressable>
+                        <Text fontSize={'sm'} fontWeight={'bold'} >Kwality Wall's Frozen Dessert and  Ice Cream Shop</Text>
                     </HStack>
-                    <HStack w={"63%"} borderRadius={5} borderWidth={"1px"} borderColor={"gray.300"} shadow={3}>
-                        <HStack w={"35%"} alignItems={'center'} justifyContent={'space-between'}>
-                            <HStack>
-                                <Icon as={<MaterialIcons name="location-on" />} color={"red.400"} size={6} m={"6px"} />
-                                <Input w={"80%"} variant="unstyled" placeholder="Kolkata" fontSize={'sm'} />
-                            </HStack>
-                            <HStack >
-                                <Menu mt={5} bgColor={"white"} placement='bottom right' w={"240px"} trigger={triggerProps => {
-                                    return <Pressable  {...triggerProps}>
-                                        <Icon as={<FontAwesome name="caret-down" />} size={5} />
-                                    </Pressable>;
-                                }}>
-                                    <Menu.Item h={"60px"}>
-                                        <HStack>
-                                            <Icon as={<MaterialIcons name="my-location" />} color={"red.400"} size={5} />
-                                        </HStack>
-                                        <HStack>
-                                            <VStack>
-                                                <Text fontSize={'md'} color={'red.400'}>
-                                                    Detect current location
-                                                </Text>
-                                                <Text fontSize={'sm'} color={'gray.500'}>Using GPS</Text>
-                                            </VStack>
-                                        </HStack>
-                                    </Menu.Item>
-                                    <Divider w="100%" color={'gray.500'} />
-                                    <Menu.Item h={"60px"} pt={5}>
-                                        <HStack>
-                                            <Icon as={<FontAwesome5 name="plus" />} color={"red.400"} size={5} />
-                                        </HStack>
-                                        <HStack>
-                                            <VStack>
-                                                <Text fontSize={'md'} color={'red.400'}>
-                                                    Add address
-                                                </Text>
-                                            </VStack>
-                                        </HStack>
-                                    </Menu.Item>
-                                    <Divider w="100%" color={'gray.500'} />
-                                    <Menu.Group title="Saved Addresses">
-                                        <Menu.Item h={"60px"}>
-                                            <HStack>
-                                                <Icon as={<MaterialIcons name="home" />} color={"gray.400"} size={5} />
-                                            </HStack>
-                                            <HStack>
-                                                <VStack>
-                                                    <Text fontSize={'md'} color={'gray.800'}>
-                                                        Home
-                                                    </Text>
-                                                    <Text fontSize={'sm'} color={'gray.500'}>Kolkata , India - 700001</Text>
-                                                </VStack>
-                                            </HStack>
-                                        </Menu.Item>
-                                        <Menu.Item h={"60px"}>
-                                            <HStack>
-                                                <Icon as={<MaterialIcons name="shopping-bag" />} color={"gray.400"} size={5} />
-                                            </HStack>
-                                            <HStack>
-                                                <VStack>
-                                                    <Text fontSize={'md'} color={'gray.800'}>
-                                                        Work
-                                                    </Text>
-                                                    <Text fontSize={'sm'} color={'gray.500'}>Kolkata , India - 700091</Text>
-                                                </VStack>
-                                            </HStack>
-                                        </Menu.Item>
-                                    </Menu.Group>
-                                </Menu>
-                            </HStack>
+
+                    <ScrollView w={"100%"} showsVerticalScrollIndicator={false} >
+
+                        <HStack mt={'5'} p={'3'} space={'2'} alignItems={'center'} bgColor={'white'} borderRadius={15} >
+                            <Icon as={<Fontisto name="stopwatch" />} size={'md'} />
+                            <Text fontSize={'sm'} fontWeight={'semibold'}>Delivery in</Text>
+                            <Text fontSize={'sm'} fontWeight={'bold'}>20-25 min</Text>
                         </HStack>
 
-                        <Divider orientation="vertical" my={"1px"} bg="gray.200" />
+                        <Text color={"gray.400"} mt={'4'} mb={'4'} alignSelf={'center'} fontSize={'xs'} fontWeight={'semibold'}>I T E M (S)  A D D E D</Text>
 
-                        <Input w={"64%"} variant="unstyled" placeholder="Search for resturant, cuisine or a dish" fontSize={'md'} InputLeftElement={<Icon ml="2" size="7" color="gray.500" as={<EvilIcons name="search" />} />} />
-                    </HStack>
-                    <VStack w={"23%"} bgColor={'white'} alignItems={'self-end'}>
-                        <Menu placement='bottom right' w={"150px"} bg={"green.600"} trigger={triggerProps => {
-                            return <Pressable  {...triggerProps}>
-                                <HStack alignItems={'center'}>
-                                    <Avatar size={'42px'} source={{ uri: "https://images.unsplash.com/photo-1614289371518-722f2615943d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" }} />
-                                    <Text pl={"7px"} fontSize={"md"} fontWeight={"semibold"} >
-                                        Akash
+                        <VStack space={'1'} bgColor={'white'} borderRadius={15} >
+
+                            <HStack m={'3'} >
+                                <VStack w={"5%"} mt={'1'}>
+                                    <Image source={{
+                                        uri: "data:image/png;base64,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"
+                                    }} alt="Alternate Text" h={'3'} w={'3'} />
+                                </VStack>
+
+                                <VStack w={"75%"}>
+                                    <Text fontSize={'sm'} fontWeight={'bold'}>
+                                        Peri Peri Fries
                                     </Text>
-                                    <ChevronDownIcon size="3" pl={"7px"} pr={"5px"} />
-                                </HStack>
-                            </Pressable>;
-                        }}>
-                            <Menu.Item isFocused><Text color={"white"} fontWeight={'extrabold'} onPress={() => navigation.navigate("Home")}>Home</Text></Menu.Item>
-                            <Menu.Item><Text color={"white"} fontWeight={'extrabold'} onPress={() => navigation.navigate("SignUpNew")}>Profile</Text></Menu.Item>
-                            <Menu.Item><Text color={"white"} fontWeight={'extrabold'}>Sign Out</Text></Menu.Item>
-                        </Menu>
-                    </VStack>
-                </HStack>
+                                    <Text fontSize={'xs'} fontWeight={'normal'} color={'black'}>
+                                        ₹119
+                                    </Text>
+                                    <Text fontSize={'xs'} fontWeight={'normal'} color={'gray.500'}>
+                                        Regular, Green Chilli Dip
+                                    </Text>
+                                    <Text fontSize={'xs'} fontWeight={'normal'} color={'red.500'}>
+                                        Edit
+                                    </Text>
+                                </VStack>
 
-                <Divider w="100%" color={'gray.500'} />
-
-                <HStack w={"82%"} bg={"white"} pt={"15px"} pb={"20px"} justifyContent={'space-between'} alignSelf={'center'}>
-
-                    <VStack space={"md"} >
-                        <Heading size="lg" fontWeight="extrabold" color={"green.600"} >
-                            Sign Up
-                        </Heading>
-                        <FormControl isRequired isInvalid={'name' in errors}>
-                            <Input onChangeText={setUserNamee} borderRadius={"35px"} _hover={{ borderColor: "green.800" }} _focus={{ borderColor: "green.800", bg: "white" }} InputRightElement={<Icon as={<FontAwesome5 name="user-alt" />} size={4} mr="2" color="muted.400" />} placeholder="Name" type="text" />
-                        </FormControl>
-                        <FormControl isRequired isInvalid={'email' in errors}>
-                            <Input onChangeText={setUserEmail} borderRadius={"35px"} _hover={{ borderColor: "green.800" }} _focus={{ borderColor: "green.800", bg: "white" }} InputRightElement={<Icon as={<MaterialIcons name="email" />} size={4} mr="2" color="muted.400" />} placeholder="Email" type="email" />
-                        </FormControl>
-                        <FormControl isRequired isInvalid={'mobile' in errors}>
-                            <Input onChangeText={setUserMobile} borderRadius={"35px"} _hover={{ borderColor: "green.800" }} _focus={{ borderColor: "green.800", bg: "white" }} InputRightElement={<Icon as={<FontAwesome5 name="mobile" />} size={4} mr="1" color="muted.400" />} placeholder="Mobile" type="text" />
-                        </FormControl>
-                        <FormControl isRequired isInvalid={'password' in errors}>
-                            <Input onChangeText={setUserPassword} borderRadius={"35px"} _hover={{ borderColor: "green.800" }} _focus={{ borderColor: "green.800", bg: "white" }} InputRightElement={<Pressable onPress={() => setShowPassword(!showPassword)}>
-                                < Icon as={<MaterialIcons name={showPassword ? "visibility" : "visibility-off"} />} size={4} mr="2" color="muted.400" />
-                            </Pressable>} placeholder="Password" type={showPassword ? "text" : "password"} />
-                        </FormControl>
-                        <Button w={"40"} alignSelf={"center"} _text={{ fontWeight: "bold" }} borderRadius={"35px"} bg={"green.600"} _hover={{ bg: "gray.600" }} _pressed={{ bg: "green.600" }} onPress={() => navigation.replace("Payment") }>
-                            Proceed to Pay
-                        </Button>
-
-
-                    </VStack>
-
-                    <VStack>
-                        <HStack ml={4} mb={10}>
-                            <Image mr={4} borderRadius={10} source={{ uri: "https://b.zmtcdn.com/data/dish_photos/d25/51f9a09412b772740a39072879e5dd25.jpg?fit=around|130:130&crop=130:130;*,*" }} alt="Alternate Text" size="xl" />
-                            <VStack w={"70%"}>
-                                <HStack justifyContent={'space-between'}>
-                                    <Text fontSize={'lg'} fontWeight={'semibold'}>Hot And Sour Soup Veg</Text>
-                                    <Button bgColor={'red.400'} w={"100px"} h={"25px"} onPress={() => alert("Added !")}>
-                                        <Text fontSize={'xs'} fontWeight={'semibold'} color={'white'} >
-                                            <Icon as={<FontAwesome5 name="minus" />} color={'white'} size={4} /> 
-                                            Add to cart
-                                            <Icon as={<FontAwesome5 name="plus" />} color={'white'} size={4} /> 
+                                <VStack w={"20%"} mt={'1'} alignItems={'flex-end'}>
+                                    <Button variant="outline" size="xs" w={'16'} h={"6"} p={0} borderRadius={8} borderColor={'red.600'} bgColor={'red.50'}>
+                                        <Text color={"red.400"} fontSize={'xs'} fontWeight={'semibold'}>
+                                            -  1  +
                                         </Text>
                                     </Button>
-                                </HStack>
-                                <HStack>
-                                    <Icon as={<AntDesign name="star" />} color={"yellow.400"} size={4} />
-                                    <Icon as={<AntDesign name="star" />} color={"yellow.400"} size={4} />
-                                    <Icon as={<AntDesign name="star" />} color={"yellow.400"} size={4} />
-                                    <Icon as={<AntDesign name="star" />} color={"gray.200"} size={4} />
-                                    <Icon as={<AntDesign name="star" />} color={"gray.200"} size={4} />
-                                    <Text color={'gray.400'}>5 Votes</Text>
-                                </HStack>
-                                <Text color={'gray.500'} mt={1} mb={1}>₹119</Text>
-                                <Text color={'gray.500'}>This soup come in a spicy, soya based and brown colour with cabbage, carrot, tofu and shiitake mushroom.</Text>
-                            </VStack>
-                        </HStack>
+                                    <Text fontSize={'xs'} fontWeight={'normal'} color={'black'}>₹119</Text>
+                                </VStack>
+                            </HStack>
 
-                        <HStack ml={4} mb={10}>
-                            <Image mr={4} borderRadius={10} source={{ uri: "https://b.zmtcdn.com/data/dish_photos/2aa/da9b7cb9d306e2d301360c5918fca2aa.jpg?fit=around|130:130&crop=130:130;*,*" }} alt="Alternate Text" size="xl" />
-                            <VStack w={"70%"}>
-                                <HStack justifyContent={'space-between'}>
-                                    <Text fontSize={'lg'} fontWeight={'semibold'}>Ginger Capsicum Flavored Rice</Text>
-                                    <Button bgColor={'red.400'} w={"100px"} h={"25px"} onPress={() => navigation.replace("Checkout")}>
-                                        <Text fontSize={'xs'} fontWeight={'semibold'} color={'white'} >
-                                            <Icon as={<FontAwesome5 name="minus" />} color={'white'} size={4} /> 
-                                            Add to cart
-                                            <Icon as={<FontAwesome5 name="plus" />} color={'white'} size={4} /> 
+                            <HStack m={'3'} >
+                                <VStack w={"5%"} mt={'1'}>
+                                    <Image source={{
+                                        uri: "data:image/png;base64,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"
+                                    }} alt="Alternate Text" h={'3'} w={'3'} />
+                                </VStack>
+
+                                <VStack w={"75%"}>
+                                    <Text fontSize={'sm'} fontWeight={'bold'}>
+                                        Peri Peri Fries
+                                    </Text>
+                                    <Text fontSize={'xs'} fontWeight={'normal'} color={'black'}>
+                                        ₹119
+                                    </Text>
+                                    <Text fontSize={'xs'} fontWeight={'normal'} color={'gray.500'}>
+                                        Regular, Green Chilli Dip
+                                    </Text>
+                                    <Text fontSize={'xs'} fontWeight={'normal'} color={'red.500'}>
+                                        Edit
+                                    </Text>
+                                </VStack>
+
+                                <VStack w={"20%"} mt={'1'} alignItems={'flex-end'}>
+                                    <Button variant="outline" size="xs" w={'16'} h={"6"} p={0} borderRadius={8} borderColor={'red.600'} bgColor={'red.50'}>
+                                        <Text color={"red.400"} fontSize={'xs'} fontWeight={'semibold'}>
+                                            -  1  +
                                         </Text>
                                     </Button>
+                                    <Text fontSize={'xs'} fontWeight={'normal'} color={'black'}>₹119</Text>
+                                </VStack>
+                            </HStack>
+
+                            {/* <HStack w={"95%"} alignSelf={'center'} alignItems={'center'} space={2} >
+                                <Divider w={"29%"}/>
+                                <Text fontSize={'10px'}>COMPLETE YOUR MEAL WITH</Text>
+                                <Divider w={"29%"}/>
+                            </HStack>
+                            
+                            <ScrollView horizontal showsHorizontalScrollIndicator={false} p={"2"} bgColor={"white"}>
+                                <HStack space={"2xl"} justifyContent="center" p={3}>
+                                    {
+                                        thirdMenuItems.map((item) => {
+
+                                            return (
+                                                <VStack alignItems={'center'} bgColor={'amber.500'} space={3} key={item.id} >
+                                                    <Pressable >
+                                                        {({ pressed }) => (
+                                                            <Avatar {...pressed ? navigation.replace("Order") : 'Press Me'} size={"2xl"} source={{ uri: String(item.img) }} width={["60px", "80px", "150px"]} height={["60px", "80px", "150px"]} />
+                                                        )}
+                                                    </Pressable>
+                                                    <Text fontSize={["xs", "sm", "md"]} fontWeight={'normal'}  > {item.name} </Text>
+                                                    <Text fontSize={["2xs", "xs", "sm"]} fontWeight={'normal'} > {item.distance} </Text>
+                                                </VStack>
+                                            )
+                                        })
+                                    }
                                 </HStack>
-                                <HStack>
-                                    <Icon as={<AntDesign name="star" />} color={"yellow.400"} size={4} />
-                                    <Icon as={<AntDesign name="star" />} color={"yellow.400"} size={4} />
-                                    <Icon as={<AntDesign name="star" />} color={"yellow.400"} size={4} />
-                                    <Icon as={<AntDesign name="star" />} color={"yellow.400"} size={4} />
-                                    <Icon as={<AntDesign name="star" />} color={"gray.200"} size={4} />
-                                    <Text color={'gray.400'}>35 Votes</Text>
+                            </ScrollView>  */}
+
+                        </VStack>
+
+                        <VStack space={'1'} mt={'3'} bgColor={'white'} borderRadius={15}>
+                            <Pressable onPress={() => navigation.navigate("Order")}>
+                                <HStack m={'3'}>
+                                    <HStack w={"95%"} space={2} alignItems={'center'} >
+                                        <Icon as={<AntDesign name="pluscircleo" />} size={'xs'} />
+                                        <Text fontSize={'sm'} fontWeight={'semibold'}>
+                                            Add more items
+                                        </Text>
+                                    </HStack>
+                                    <HStack w={"5%"} alignSelf={'center'}>
+                                        <Icon as={<AntDesign name="right" />} size={'xs'} />
+                                    </HStack>
                                 </HStack>
-                                <Text color={'gray.500'} mt={1} mb={1}>₹139</Text>
-                                <Text color={'gray.500'}>Rice sauteed with shredded bell pepper, ginger and mushroom</Text>
-                            </VStack>
-                        </HStack>
+                            </Pressable>
 
-                        <Input placeholder="Apply Coupon" fontSize={'sm'} />
+                            <Divider />
 
-                        <Text>Bill Details</Text>
-                        <Text>Item Total ₹730</Text>
-                        <Text>Delivery Fee | 5.0 kms i  ₹69</Text>
-                        <Divider/>
-                        <Text>Delivery Tip</Text>
-                        <Text>Platoform fee i ₹2</Text>
-                        <Text>GST and Resturant Charges i ₹30</Text>
-                        <Text>Total Pay ₹831</Text>
+                            <Pressable onPress={() => { }}>
+                                <HStack m={'3'}>
+                                    <HStack w={"95%"} space={2} alignItems={'center'} >
+                                        <Icon as={<AntDesign name="form" />} size={'xs'} />
+                                        <Text fontSize={'sm'} fontWeight={'semibold'}>
+                                            Add cooking instructions
+                                        </Text>
+                                    </HStack>
+                                    <HStack w={"5%"} alignSelf={'center'}>
+                                        <Icon as={<AntDesign name="right" />} size={'xs'} />
+                                    </HStack>
+                                </HStack>
+                            </Pressable>
 
-                    </VStack>
-                </HStack>
+                            <Divider />
+
+                            <Pressable onPress={() => { }}>
+                                <HStack m={'3'}>
+                                    <HStack w={"92%"} space={2} alignItems={'center'} >
+                                        <Icon as={<FontAwesome name="cutlery" />} size={'xs'} color={'green.400'} />
+                                        <Text fontSize={'sm'} fontWeight={'semibold'}>
+                                            Dont send cutlery with this order
+                                        </Text>
+                                    </HStack>
+                                    <VStack w={"8%"} alignItems={'center'} >
+                                        <Checkbox value="green" colorScheme="green" size={'sm'} defaultIsChecked />
+                                    </VStack>
+                                </HStack>
+                            </Pressable>
+
+                        </VStack>
+
+                        <Text color={"gray.400"} mt={'4'} mb={'4'} alignSelf={'center'} fontSize={'xs'} fontWeight={'semibold'}>S A V I N G S   C O R N E R</Text>
+
+                        <VStack space={'1'} bgColor={'white'} borderRadius={15} >
+                            <Pressable onPress={() => { }}>
+                                <HStack m={'3'}>
+                                    <HStack w={"95%"} space={4} alignItems={'center'} >
+                                        <Icon as={<AntDesign name="form" />} size={'sm'} />
+                                        <Text fontSize={'sm'} fontWeight={'bold'}>
+                                            Apply coupon
+                                        </Text>
+                                    </HStack>
+                                    <HStack w={"5%"} alignSelf={'center'}>
+                                        <Icon as={<AntDesign name="right" />} size={'xs'} />
+                                    </HStack>
+                                </HStack>
+                            </Pressable>
+                        </VStack>
+
+                        <Text color={"gray.400"} mt={'4'} mb={'4'} alignSelf={'center'} fontSize={'xs'} fontWeight={'semibold'}>B I L L  S U M M A R Y</Text>
+
+                        <VStack space={'1'} bgColor={'white'} borderRadius={15} >
+
+                            <HStack m={'3'} mb={'0'} justifyContent={'space-between'}>
+                                <Text fontSize={'sm'} fontWeight={'bold'}>Subtotal</Text>
+                                <Text fontSize={'sm'} fontWeight={'bold'}>₹398</Text>
+                            </HStack>
+
+                            <HStack m={'3'}>
+                                <HStack w={"90%"} space={2} alignItems={'center'} >
+                                    <Icon as={<AntDesign name="form" />} size={'xs'} />
+                                    <Text fontSize={'xs'} fontWeight={'semibold'}>
+                                        GST and restaurant charges i
+                                    </Text>
+                                </HStack>
+                                <HStack w={"10%"} alignSelf={'center'}>
+                                    <Text fontSize={'xs'} fontWeight={'semibold'}>₹36.26</Text>
+                                </HStack>
+                            </HStack>
+
+                            <HStack m={'3'}>
+                                <HStack w={"90%"} space={2} alignItems={'center'} >
+                                    <Icon as={<AntDesign name="form" />} size={'xs'} />
+                                    <Text fontSize={'xs'} fontWeight={'semibold'}>
+                                        Delivery partner fee for 4km
+                                    </Text>
+                                </HStack>
+                                <HStack w={"10%"} alignSelf={'center'}>
+                                    <Text fontSize={'xs'} fontWeight={'semibold'}>₹36</Text>
+                                </HStack>
+                            </HStack>
+
+                            <HStack m={'3'}>
+                                <HStack w={"90%"} space={2} alignItems={'center'} >
+                                    <Icon as={<AntDesign name="form" />} size={'xs'} />
+                                    <Text fontSize={'xs'} fontWeight={'semibold'}>
+                                        Platform fee i
+                                    </Text>
+                                </HStack>
+                                <HStack w={"10%"} alignSelf={'center'}>
+                                    <Text fontSize={'xs'} fontWeight={'semibold'}>₹2</Text>
+                                </HStack>
+                            </HStack>
+
+                            <Divider />
+
+                            <HStack m={'3'} justifyContent={'space-between'}>
+                                <Text fontSize={'xs'} fontWeight={'bold'}>Grand Total</Text>
+                                <Text fontSize={'xs'} fontWeight={'bold'}>₹472.26</Text>
+                            </HStack>
+
+                        </VStack>
+
+                        <Text color={"gray.400"} mt={'4'} mb={'4'} alignSelf={'center'} fontSize={'xs'} fontWeight={'semibold'}>B E F O R E  Y O U  P L A C E  T H E  O R D E R</Text>
+
+                        <VStack space={'1'} mt={'3'} p={'3'} bgColor={'white'} borderRadius={15} >
+
+
+                            <Text fontSize={'sm'} fontWeight={'bold'}>
+                                Tip your delivery partner
+                            </Text>
+                            <Text fontSize={'xs'} fontWeight={'normal'} color={'gray.600'}>
+                                Your kindness means a lot! 100% of your tip will go directly to them
+                            </Text>
+
+                            <HStack space={'2'} m={'2'}>
+                                <Button startIcon={<Icon as={Ionicons} name="cloud-download-outline" size='2xs' />} borderRadius={'10'} p={'4'} h={'0'}>
+                                    <Text fontSize={'xs'} fontWeight={'bold'}>₹15</Text>
+                                </Button>
+                                <Button startIcon={<Icon as={Ionicons} name="cloud-download-outline" size='2xs' />} borderRadius={'10'} p={'4'} h={'0'}>
+                                    <Text fontSize={'xs'} fontWeight={'bold'}>₹20</Text>
+                                </Button>
+                                <Button startIcon={<Icon as={Ionicons} name="cloud-download-outline" size='2xs' />} borderRadius={'10'} p={'4'} h={'0'}>
+                                    <Text fontSize={'xs'} fontWeight={'bold'}>₹30</Text>
+                                </Button>
+                                <Button startIcon={<Icon as={Ionicons} name="cloud-download-outline" size='2xs' />} borderRadius={'10'} p={'4'} h={'0'}>
+                                    <Text fontSize={'xs'} fontWeight={'bold'}>Other</Text>
+                                </Button>
+                            </HStack>
+
+
+
+                        </VStack>
+
+                        <VStack space={'1'} mt={'3'} p={'3'} bgColor={'white'} borderRadius={15} >
+                            
+                                
+                                    <VStack w={"95%"}>
+                                        <Text fontSize={'sm'} fontWeight={'bold'}>
+                                            Add delivery instructions
+                                        </Text>
+                                        <Text fontSize={'xs'} fontWeight={'normal'} color={'gray.600'}>
+                                            Help your delivery partner reach you faster
+                                        </Text>
+                                    </VStack>
+                                
+                                <ScrollView horizontal showsHorizontalScrollIndicator={false} p={"2"} bgColor={"white"}>
+                                    <HStack space={"2xl"} justifyContent="center" p={3}>
+                                        {
+                                            thirdMenuItems.map((item) => {
+
+                                                return (
+                                                    <VStack alignItems={'center'} bgColor={'amber.500'} space={3} key={item.id} >
+                                                        <Pressable >
+                                                            {({ pressed }) => (
+                                                                <Avatar {...pressed ? navigation.replace("Order") : 'Press Me'} size={"2xl"} source={{ uri: String(item.img) }} width={["60px", "80px", "150px"]} height={["60px", "80px", "150px"]} />
+                                                            )}
+                                                        </Pressable>
+                                                        <Text fontSize={["xs", "sm", "md"]} fontWeight={'normal'}  > {item.name} </Text>
+                                                        <Text fontSize={["2xs", "xs", "sm"]} fontWeight={'normal'} > {item.distance} </Text>
+                                                    </VStack>
+                                                )
+                                            })
+                                        }
+                                    </HStack>
+                                </ScrollView>
+                        </VStack>
+
+                        <VStack space={'1'} mt={'3'} bgColor={'white'} borderRadius={15} >
+                            <Pressable onPress={() => { }}>
+                                <HStack m={'3'} space={'1'}>
+                                    <VStack w={"95%"}>
+                                        <Text fontSize={'sm'} fontWeight={'bold'}>
+                                            Your details
+                                        </Text>
+                                        <Text fontSize={'xs'} fontWeight={'normal'} color={'gray.600'}>
+                                            Akash Das, 9093040282
+                                        </Text>
+                                    </VStack>
+                                    <HStack w={"5%"} alignSelf={'center'}>
+                                        <Icon as={<AntDesign name="right" />} size={'xs'} />
+                                    </HStack>
+                                </HStack>
+                            </Pressable>
+                        </VStack>
+
+                        <VStack space={'1'} mt={'3'} bgColor={'white'} borderRadius={15} >
+                            <Pressable onPress={() => { }}>
+                                <HStack m={'3'} space={'1'}>
+                                    <HStack w={"10%"} alignSelf={'center'}>
+                                        <Icon as={<AntDesign name="form" />} size={'lg'} />
+                                    </HStack>
+                                    <VStack w={"85%"}>
+                                        <Text fontSize={'sm'} fontWeight={'bold'}>
+                                            Ordering for someone else ?
+                                        </Text>
+                                        <Text fontSize={'xs'} fontWeight={'normal'} color={'gray.600'}>
+                                            Add receiver details for a hassle free delivery
+                                        </Text>
+                                    </VStack>
+                                    <HStack w={"5%"} alignSelf={'center'}>
+                                        <Icon as={<AntDesign name="right" />} size={'xs'} />
+                                    </HStack>
+                                </HStack>
+                            </Pressable>
+                        </VStack>
+
+                        <Text color={"gray.400"} mt={'4'} mb={'4'} alignSelf={'center'} fontSize={'xs'} fontWeight={'semibold'}>C A N C E L L A T I O N   P O L I C Y</Text>
+
+                        <VStack space={'1'} bgColor={'white'} borderRadius={15}>
+                            <HStack m={'3'}>
+                                <Text fontSize={'xs'} fontWeight={'normal'} color={'gray.500'}>
+                                    100% cancellation fee will be applicable if you decide to cancel
+                                    the order anytime after order placement. Avoid cancellation as it
+                                    leads to food wastage.
+                                </Text>
+                            </HStack>
+                        </VStack>
+
+                        {/* footer space for safearea  */}
+                        <Text mb="48"></Text>
+
+                    </ScrollView>
+
+                </Box>
 
 
 
             </Box>
-        </NativeBaseProvider>
+        </NativeBaseProvider >
     )
 }
 

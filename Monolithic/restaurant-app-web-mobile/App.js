@@ -22,6 +22,8 @@ export default function App() {
           
       {/* <Stack.Screen name="Example"   component={Example}     />   */}
 
+      <Stack.Screen name="Checkout"  component={Checkout}     />
+
       <Stack.Screen name="Payment"   component={Payment}     />    
       <Stack.Screen name="AddPayment"   component={AddPayment}     /> 
       
@@ -30,7 +32,7 @@ export default function App() {
           <Stack.Screen name="Home"      component={Home}      />
           <Stack.Screen name="SignInNew" component={SignInNew} />
           
-          <Stack.Screen name="Checkout"  component={Checkout}     />
+          
           
           <Stack.Screen name="Order"     component={Order}     />
           

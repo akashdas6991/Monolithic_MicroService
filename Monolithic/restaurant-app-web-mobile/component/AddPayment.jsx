@@ -45,6 +45,7 @@ const AddPayment = ({ route, navigation }) => {
     const bodyContent = () => {
         if (route.params.payment == "card")
             return (<VStack space={5}>
+                        <Modals />
 
                         <Text fontWeight={'semibold'}>We accept Credit and Debit Cards from Visa, Mastercard, Rupay, Pluxee | Sodexo, American Express, Diners , Maestro & Discover.</Text>            
                     
@@ -70,7 +71,18 @@ const AddPayment = ({ route, navigation }) => {
 
                         <Button w="95%" alignSelf="center" bgColor="red.400" _hover={{ bgColor: "red.300" }}
                                 onPress={() =>  {    
-
+                                    setPaymentProcessModal(true);
+                                    setTimeout(() => {
+                                        setPaymentProcessModal(false);
+                                    }, 1500);
+            
+                                    setTimeout(() => {
+                                        setPaymentSuccessModal(true);
+                                    }, 1500);
+            
+                                    setTimeout(() => {
+                                        navigation.replace("Payment");
+                                    }, 5000);
                                                 }}>
                                     Make Payment
                         </Button>
@@ -81,7 +93,7 @@ const AddPayment = ({ route, navigation }) => {
             return  (
                 <ScrollView bgColor={'white'} showsVerticalScrollIndicator={false}>
 
-                    {modals()}
+                    <Modals />
 
                     <Text fontWeight={'semibold'} fontSize={'xl'} mt={'5'} mb={'5'}>Popular Banks</Text>
 
@@ -170,7 +182,7 @@ const AddPayment = ({ route, navigation }) => {
     const [paymentSuccessModal, setPaymentSuccessModal] = useState(false);
     const [paymentFailedModal, setPaymentFailedModal] = useState(false);
 
-    const modals = () => {
+    const Modals = () => {
 
         return (
 
@@ -181,9 +193,9 @@ const AddPayment = ({ route, navigation }) => {
                 <Modal isOpen={paymentProcessModal} onClose={() => setPaymentProcessModal(false)} size="lg">
                     <Modal.Content w="2xs" >
                         <Modal.Body>
-                            <VStack space={3} alignItems="center">
-                                <Spinner size="xl" color="red.400" />
-                                <Text fontSize="md" m={2}>Adding your card ...</Text>
+                            <VStack alignItems="center">
+                                <Spinner size="xl" color="red.400"  m={"4"}/>
+                                <Text fontSize="sm" m={2}>Adding your card / Connecting Bank</Text>
                             </VStack>
                         </Modal.Body>
                     </Modal.Content>
@@ -196,9 +208,10 @@ const AddPayment = ({ route, navigation }) => {
                 <Modal isOpen={paymentSuccessModal} onClose={() => setPaymentSuccessModal(false)} size="lg">
                     <Modal.Content w="2xs" >
                         <Modal.Body>
-                            <VStack space={3} alignItems="center">
-                                <Icon as={<AntDesign name="checkcircleo" />} size="3xl" color="green.700" />
-                                <Text fontSize="md" m={2}>Card added Successfully.</Text>
+                            <VStack alignItems="center">
+                                <Icon as={<AntDesign name="checkcircleo" />} size="3xl" m={"4"} color="green.700" />
+                                <Text fontSize="md" alignSelf={'center'}>Card added / Bank Verified</Text>
+                                <Text fontSize="md" alignSelf={'center'}>Successfully.</Text>
                             </VStack>
                         </Modal.Body>
                     </Modal.Content>
@@ -211,9 +224,10 @@ const AddPayment = ({ route, navigation }) => {
                 <Modal isOpen={paymentFailedModal} onClose={() => setPaymentFailedModal(false)} size="lg">
                     <Modal.Content w="320px" h="320px">
                         <Modal.Body>
-                            <VStack space={3} alignItems="center" p={5}>
-                                <Icon as={<AntDesign name="closecircleo" />} size={40} color="red.700" />
-                                <Text fontSize="md" m={2}>Card Failed to Add.</Text>
+                            <VStack alignItems="center">
+                                <Icon as={<AntDesign name="closecircleo" />} size="3xl" m={"4"} color="red.700" />
+                                <Text fontSize="md" alignSelf={'center'}>Card add / Bank verification</Text>
+                                <Text fontSize="md" alignSelf={'center'}>Failed.</Text>
                             </VStack>
                         </Modal.Body>
                     </Modal.Content>
