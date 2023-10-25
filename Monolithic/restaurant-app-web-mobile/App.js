@@ -9,8 +9,7 @@ import ConfirmPassword from './component/ConfirmPassword';
 import Order from './component/Order';
 import Checkout from './component/Checkout';
 import Payment from './component/Payment';
-import Example from './component/web/Example';
-import AddPayment from './component/AddPayment';
+import Utility from './component/Utility';
 
 const Stack = createNativeStackNavigator();
 
@@ -20,21 +19,23 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown : false}}>  
           
-      {/* <Stack.Screen name="Example"   component={Example}     />   */}
-
+      <Stack.Screen name="Home"      component={Home}      />
       <Stack.Screen name="Checkout"  component={Checkout}     />
 
+      
+      <Stack.Screen name="Order"     component={Order}     />
+      
       <Stack.Screen name="Payment"   component={Payment}     />    
-      <Stack.Screen name="AddPayment"   component={AddPayment}     /> 
+      <Stack.Screen name="Utility"   component={Utility}     /> 
       
           
                
-          <Stack.Screen name="Home"      component={Home}      />
+          
           <Stack.Screen name="SignInNew" component={SignInNew} />
           
           
           
-          <Stack.Screen name="Order"     component={Order}     />
+          
           
           <Stack.Screen name="SignUpNew" component={SignUpNew} />
           <Stack.Screen name="ForgetPassword"  component={ForgetPassword}  />

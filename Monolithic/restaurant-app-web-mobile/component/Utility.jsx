@@ -6,9 +6,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ApiService from './service/apiService';
 import { useState } from 'react';
 
-const AddPayment = ({ route, navigation }) => {
-
-    const {payment} = route.params.payment ;
+const Utility = ({ route, navigation }) => {
 
     const popularBankList = ApiService.popularBankList();
     const allBankList = ApiService.allBankList();
@@ -18,7 +16,7 @@ const AddPayment = ({ route, navigation }) => {
             return  (
                 <VStack>
                     <HStack w={"100%"} mt={'4'} mb={'4'} alignItems={'center'}>
-                        <Pressable onPress={() => navigation.replace("Checkout")}>
+                        <Pressable onPress={() => navigation.goBack()}>
                             <Icon as={<AntDesign name="arrowleft" />} size={4} m={'3'} ml={'0'} />
                         </Pressable>
                         <Text fontSize={'xl'} fontWeight={'semibold'} ml={'2'}>Add a Card</Text>
@@ -254,4 +252,4 @@ const AddPayment = ({ route, navigation }) => {
     )
 }
 
-export default AddPayment
+export default Utility

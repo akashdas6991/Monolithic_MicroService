@@ -1,14 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Heading, Text, Center, NativeBaseProvider, Link, PresenceTransition, VStack, HStack, Alert, Avatar, AspectRatio, Image, Stack, Flex, Spacer, ScrollView, Divider, StatusBar, IconButton, Icon, Input, Button, ChevronDownIcon, Menu, HamburgerIcon, Popover, Badge, Modal, Radio, Spinner, CloseIcon, CheckIcon } from "native-base";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import apiService from './service/apiService';
+import React, { useState } from 'react';
+import { Box, Text, Center, NativeBaseProvider, VStack, HStack, Image, ScrollView, Divider, Icon, Input, Button, Modal, Spinner } from "native-base";
+import { Pressable } from 'react-native';
+import { AntDesign, FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/native-stack';
-import { BackHandler, Platform, Pressable, Alert as ReactAlert } from 'react-native';
-import { AntDesign, EvilIcons, FontAwesome, FontAwesome5, Ionicons, MaterialIcons } from '@expo/vector-icons';
-import { Screen, ScreenContainer } from 'react-native-screens';
-import { Dimensions } from 'react-native';
-import ApiService from './service/apiService';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const Payment = ({ navigation }) => {
     
@@ -117,7 +112,7 @@ const Payment = ({ navigation }) => {
 
                             <Divider w={"90%"} alignSelf={'center'} bgColor={"gray.100"} />
 
-                            <Pressable onPress={() => navigation.navigate("AddPayment" , { payment : 'card'   } )}>
+                            <Pressable onPress={() => navigation.navigate("Utility" , { payment : 'card'   } )}>
                                 <HStack m={'3'}>
                                     <HStack w={"90%"} space={5} alignItems={'center'} >
                                         <Box borderWidth={"1px"} borderColor={"gray.200"} borderRadius={5} p={1}>
@@ -137,7 +132,7 @@ const Payment = ({ navigation }) => {
 
                             <Divider w={"90%"} alignSelf={'center'} bgColor={"gray.100"} />
 
-                            <Pressable onPress={() => navigation.navigate("AddPayment" , { payment : 'card'   } )}>
+                            <Pressable onPress={() => navigation.navigate("Utility" , { payment : 'card'   } )}>
                                 <HStack m={'3'}>
                                     <HStack w={"90%"} space={5} alignItems={'center'} >
                                         <Box borderWidth={"1px"} borderColor={"gray.200"} borderRadius={5} p={1}>
@@ -431,7 +426,7 @@ const Payment = ({ navigation }) => {
                         <Text color={"gray.400"} mt={'4'} mb={'4'} alignSelf={'center'}>NETBANKING</Text>
 
                         <VStack space={'1'} bgColor={'white'} borderRadius={15}>
-                            <Pressable onPress={() => navigation.navigate("AddPayment" , { payment : 'bank'   } )}>
+                            <Pressable onPress={() => navigation.navigate("Utility" , { payment : 'bank'   } )}>
                                 <HStack m={'3'}>
                                     <HStack w={"90%"} space={5} alignItems={'center'} >
                                         <Box borderWidth={"1px"} borderColor={"gray.200"} borderRadius={5} p={1}>
