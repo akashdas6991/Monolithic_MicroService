@@ -12,6 +12,10 @@ const WebHome = () => {
     const navigation = useNavigation();
     const firstMenuItems = apiService.firstMenuItems();
     const secondMenuItems = apiService.secondMenuItems();
+    const popularCuisines = apiService.popularCuisines();
+    const popularRestaurant = apiService.popularRestaurant();
+    const topRestaurantChains = apiService.topRestaurantChains();
+    const citiesWeDeliverTo = apiService.citiesWeDeliverTo();    
 
     const [box1, setBox1] = React.useState("none");
     const [box2, setBox2] = React.useState("none");
@@ -23,7 +27,7 @@ const WebHome = () => {
     //tabs content start
     const Delivery = () => <>
 
-        <Modal isOpen={modalVisible} onClose={setModalVisible} size={"sm"}>
+        <Modal isOpen={modalVisible} onClose={setModalVisible} size={"sm"} >
             <Modal.Content>
                 <VStack space={'10'}>
                     <Modal.CloseButton />
@@ -78,10 +82,8 @@ const WebHome = () => {
 
                                 return (
                                     <VStack alignItems={'center'} space={1} key={item.id} >
-                                        <Pressable >
-                                            {({ pressed }) => (
-                                                <Avatar {...pressed ? navigation.navigate("Order") : 'Press Me'} m={2} source={{ uri: String(item.img) }} width={["60px", "80px", "150px"]} height={["60px", "80px", "150px"]} />
-                                            )}
+                                        <Pressable onPress={ () => { navigation.navigate("Order") } }>                                            
+                                            <Avatar m={2} source={{ uri: String(item.img) }} width={["60px", "80px", "150px"]} height={["60px", "80px", "150px"]} />                                           
                                         </Pressable>
                                         <Text fontSize={["sm", "md", "lg"]} fontWeight={'semibold'} > {item.name} </Text>
                                     </VStack>
@@ -105,10 +107,8 @@ const WebHome = () => {
 
                             return (
                                 <VStack alignItems={'center'} space={3} key={item.id} >
-                                    <Pressable >
-                                        {({ pressed }) => (
-                                            <Avatar {...pressed ? navigation.navigate("Order") : 'Press Me'} size={"2xl"} source={{ uri: String(item.img) }} width={["60px", "80px", "150px"]} height={["60px", "80px", "150px"]} />
-                                        )}
+                                    <Pressable onPress={() => { navigation.navigate("Order") }}>
+                                        <Avatar size={"2xl"} source={{ uri: String(item.img) }} width={["60px", "80px", "150px"]} height={["60px", "80px", "150px"]} />                                        
                                     </Pressable>
                                     <Text fontSize={["xs", "sm", "md"]} fontWeight={'normal'}  > {item.name} </Text>
                                     <Text fontSize={["2xs", "xs", "sm"]} fontWeight={'normal'} > {item.distance} </Text>
@@ -367,52 +367,42 @@ const WebHome = () => {
         </Box>
 
         <Box w={"100%"} bgColor={"gray.50"} >
-            <VStack w={"82%"} alignSelf={'center'} space={"5"} pt={"10"} pb={"10"}>
+            <VStack w={"82%"} alignSelf={'center'} space={"5"} pt={"10"} pb={"12"}>
                 <Text fontSize={"3xl"} fontWeight={"semibold"} >Explore options near me</Text>
 
                 <VStack borderWidth={"1"} borderRadius={"10"} p={"5"} bgColor={"white"} borderColor={"gray.200"}>
                     <Pressable onPress={() => { box1 === "flex" ? setBox1("none") : setBox1("flex") }}>
                         <HStack justifyContent={'space-between'} alignItems={'center'}>
-                            <Text fontSize={"xl"} fontWeight={"semibold"} color={"gray.600"}>Popular cuisines near me</Text>
-                            <Icon as={<AntDesign name={box1 === "flex" ? "up" : "down"} />} color={"gray.400"} size={3} mt={"1"} />
+                            <Text fontSize={"xl"} color={"gray.600"}>Popular cuisines near me</Text>
+                            <Icon as={<AntDesign name={box1 === "flex" ? "up" : "down"} />} color={"gray.600"} size={4} />
                         </HStack>
-                    </Pressable>
-                    <Text fontSize={"lg"} fontWeight={"normal"} color={"gray.400"} display={box1} mt={"7"}>
-                        Bakery food near me Bengali food near meBeverages food near meBiryani food near meBurger food near me
-                        Chinese food near me Continental food near meDesserts food near meKebab food near meMomos food near me
-                        Mughlai food near meNorth Indian food near mePizza food near meRolls food near meSandwich food near me
-                        Seafood food near meShake food near meSichuan food near meSouth Indian food near meStreet food near me
-                    </Text>
+                    </Pressable>                    
+                    <Text fontSize={"lg"} color={"gray.500"} display={box1} mt={"7"}>
+                        { popularCuisines.map( (item)  => { return  <>{item.name} food near me  .  </>  }) }
+                    </Text>                                                                                
                 </VStack>
 
                 <VStack borderWidth={"1"} borderRadius={"10"} p={"5"} bgColor={"white"} borderColor={"gray.200"}>
                     <Pressable onPress={() => { box2 === "flex" ? setBox2("none") : setBox2("flex") }}>
                         <HStack justifyContent={'space-between'} alignItems={'center'}>
-                            <Text fontSize={"xl"} fontWeight={"semibold"} color={"gray.600"}>Popular restaurant types near me</Text>
-                            <Icon as={<AntDesign name={box2 === "flex" ? "up" : "down"} />} color={"gray.400"} size={3} mt={"1"} />
+                            <Text fontSize={"xl"} color={"gray.600"}>Popular restaurant types near me</Text>
+                            <Icon as={<AntDesign name={box2 === "flex" ? "up" : "down"} />} color={"gray.600"} size={4} />
                         </HStack>
                     </Pressable>
-                    <Text fontSize={"lg"} fontWeight={"normal"} color={"gray.400"} display={box2} mt={"7"}>
-                        Bakeries near meBars near meBeverage Shops near meBhojanalya near meCafés near meCasual Dining near me
-                        Clubs near meCocktail Bars near meConfectioneries near meDessert Parlors near meDhabas near me
-                        Fine Dining near meFood Courts near meFood Trucks near meKiosks near meLounges near meMicrobreweries near me
-                        Paan Shop near mePubs near meQuick Bites near meSweet Shops near me
-                    </Text>
+                    <Text fontSize={"lg"} color={"gray.500"} display={box2} mt={"7"}>
+                        { popularRestaurant.map( (item)  => { return <>{item.name} near me  .  </> }) }
+                    </Text>  
                 </VStack>
 
                 <VStack borderWidth={"1"} borderRadius={"10"} p={"5"} bgColor={"white"} borderColor={"gray.200"}>
                     <Pressable onPress={() => { box3 === "flex" ? setBox3("none") : setBox3("flex") }}>
                         <HStack justifyContent={'space-between'} alignItems={'center'}>
-                            <Text fontSize={"xl"} fontWeight={"semibold"} color={"gray.600"}>Top Restaurant Chains</Text>
-                            <Icon as={<AntDesign name={box3 === "flex" ? "up" : "down"} />} color={"gray.400"} size={3} mt={"1"} />
+                            <Text fontSize={"xl"} color={"gray.600"}>Top Restaurant Chains</Text>
+                            <Icon as={<AntDesign name={box3 === "flex" ? "up" : "down"} />} color={"gray.600"} size={4} />
                         </HStack>
                     </Pressable>
-                    <HStack display={box3} mt={"7"} space={"7"}>
-                        <Text fontSize={"lg"} fontWeight={"normal"} color={"gray.400"} >Burger King</Text>
-                        <Text fontSize={"lg"} fontWeight={"normal"} color={"gray.400"} >Burger Singh</Text>
-                        <Text fontSize={"lg"} fontWeight={"normal"} color={"gray.400"} >Domino's</Text>
-                        <Text fontSize={"lg"} fontWeight={"normal"} color={"gray.400"} >Haldiram's</Text>
-                        <Text fontSize={"lg"} fontWeight={"normal"} color={"gray.400"} >KFC</Text>
+                    <HStack display={box3} mt={"7"} space={"24"}>                        
+                        { topRestaurantChains.map( (item)  => {  return  <Button variant={"unstyled"} onPress={() => { setModalVisible(!modalVisible) }}><Text fontSize={"lg"} fontWeight={"normal"} color={"gray.400"} >{item.name}</Text></Button>  }) }
                     </HStack>
                 </VStack>
 
@@ -420,45 +410,31 @@ const WebHome = () => {
                 <VStack borderWidth={"1"} borderRadius={"10"} p={"5"} bgColor={"white"} borderColor={"gray.200"}>
                     <Pressable onPress={() => { box4 === "flex" ? setBox4("none") : setBox4("flex") }}>
                         <HStack justifyContent={'space-between'} alignItems={'center'}>
-                            <Text fontSize={"xl"} fontWeight={"semibold"} color={"gray.600"}>Cities We Deliver To</Text>
-                            <Icon as={<AntDesign name={box4 === "flex" ? "up" : "down"} />} color={"gray.400"} size={3} mt={"1"} />
+                            <Text fontSize={"xl"} color={"gray.600"}>Cities We Deliver To</Text>
+                            <Icon as={<AntDesign name={box4 === "flex" ? "up" : "down"} />} color={"gray.600"}  size={4} />
                         </HStack>
                     </Pressable>
-                    <HStack display={box4} mt={"7"} space={"7"}>
-                        <VStack>
-                            <Text fontSize={"lg"} fontWeight={"normal"} color={"gray.400"} >Delhi NCR</Text>
-                            <Text>Burger Singh</Text>
-                            <Text>Domino's</Text>
-                            <Text>Haldiram's</Text>
-                            <Text>KFC</Text>
+                    <HStack display={box4} mt={"7"} space={"16"}>
+                        <VStack space={"3"}>                                                    
+                            {   citiesWeDeliverTo.map( (item)  => {   if(item.id <= 13)                     return <Button variant={"unstyled"} onPress={() => { setModalVisible(!modalVisible) }}><Text fontSize={"lg"} fontWeight={"normal"} color={"gray.400"} >{item.name}</Text></Button>  }) }
                         </VStack>
-                        <VStack>
-                            <Text fontSize={"lg"} fontWeight={"normal"} color={"gray.400"} >Kolkata</Text>
-                            <Text>Burger Singh</Text>
-                            <Text>Domino's</Text>
-                            <Text>Haldiram's</Text>
-                            <Text>KFC</Text>
+                        <VStack space={"3"}>                                                    
+                            {   citiesWeDeliverTo.map( (item)  => {   if( item.id >= 14 && item.id <= 26 )  return <Button variant={"unstyled"} onPress={() => { setModalVisible(!modalVisible) }}><Text fontSize={"lg"} fontWeight={"normal"} color={"gray.400"} >{item.name}</Text></Button> })  }
                         </VStack>
-                        <VStack>
-                            <Text fontSize={"lg"} fontWeight={"normal"} color={"gray.400"} >Mumbai</Text>
-                            <Text>Burger Singh</Text>
-                            <Text>Domino's</Text>
-                            <Text>Haldiram's</Text>
-                            <Text>KFC</Text>
+                        <VStack space={"3"}>                                                    
+                            {   citiesWeDeliverTo.map( (item)  => {   if( item.id >= 27 && item.id <= 39 )  return <Button variant={"unstyled"} onPress={() => { setModalVisible(!modalVisible) }}><Text fontSize={"lg"} fontWeight={"normal"} color={"gray.400"} >{item.name}</Text></Button> })  }
                         </VStack>
-                        <VStack>
-                            <Text fontSize={"lg"} fontWeight={"normal"} color={"gray.400"} >Bengaluru</Text>
-                            <Text>Burger Singh</Text>
-                            <Text>Domino's</Text>
-                            <Text>Haldiram's</Text>
-                            <Text>KFC</Text>
+                        <VStack space={"3"}>                                                    
+                            {   citiesWeDeliverTo.map( (item)  => {   if( item.id >= 40 && item.id <= 52 )  return <Button variant={"unstyled"} onPress={() => { setModalVisible(!modalVisible) }}><Text fontSize={"lg"} fontWeight={"normal"} color={"gray.400"} >{item.name}</Text></Button> })  }
                         </VStack>
-                        <VStack>
-                            <Text fontSize={"lg"} fontWeight={"normal"} color={"gray.400"} >Pune</Text>
-                            <Text>Burger Singh</Text>
-                            <Text>Domino's</Text>
-                            <Text>Haldiram's</Text>
-                            <Text>KFC</Text>
+                        <VStack space={"3"}>                                                    
+                            {   citiesWeDeliverTo.map( (item)  => {   
+                                    if( item.id >= 53 && item.name == "See More")                   
+                                        return <Button variant={"unstyled"} onPress={() => { setModalVisible(!modalVisible) }} borderBottomColor={"black"} borderBottomWidth={"1"}  borderBottomRadius={"0"} ><Text fontSize={"lg"} fontWeight={"normal"} color={"gray.600"} >{item.name}</Text></Button>
+                                    else if( item.id >= 53 )                 
+                                        return <Button variant={"unstyled"} onPress={() => { setModalVisible(!modalVisible) }}><Text fontSize={"lg"} fontWeight={"normal"} color={"gray.400"} >{item.name}</Text></Button>                                     
+                                })  
+                            }
                         </VStack>
                     </HStack>
                 </VStack>
